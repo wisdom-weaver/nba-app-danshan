@@ -56,12 +56,27 @@ const injuries_key_mapping = [
   }
 ]
 
-const structure_injuries_raw_data = (raw) => {
+const structure_injuries_raw_data = ({raw, search}) => {
   var structured = {};
-  for (var row of raw) {
-    console.log(row);
-    row = injuries_key_mapping.reduce((acc, { key_init, key_final, key_head }) => ({ ...acc, [key_final]: row[key_init]?.$t }), {})
+  if (search?.length>0){
+    const filter = raw.filter(row=>
+      row.content.$t
+      .replace(' ','')
+      .replace('player','')
+      .replace('pos','')
+      .replace('date','')
+      .replace('injury','')
+      .replace('status','')
+      .replace('expectedreturn','')
+      .replace('comments','')
+      .toLowerCase().includes(search.toLowerCase()));
+    raw = filter;
+  }
 
+
+  for (var row of raw) {
+    row = injuries_key_mapping.reduce((acc, { key_init, key_final, key_head }) => ({ ...acc, [key_final]: row[key_init]?.$t }), {})
+    
     var team = row['team']
     structured[team] = {
       ...(structured[team] || []),
@@ -74,7 +89,7 @@ const structure_injuries_raw_data = (raw) => {
       ...get_team_data(team)
     }
   }
-  return structured;
+  return structured
 }
 
 const EachTeamInjuries = ({ team_ob }) => {
@@ -125,10 +140,12 @@ const InjuriesJSX = (props) => {
   const { api_data } = props;
   const raw = api_data.feed.entry;
   console.log('injuries jsx raw=>', raw);
-  const structured = structure_injuries_raw_data(raw);
-  console.log('injuries jsx strucured=>', structured);
   
   const [search, set_search] = useState('');
+
+  const structured = structure_injuries_raw_data({raw, search});
+  console.log('injuries jsx strucured=>', structured);
+  
 
   return (
     <div className="">
