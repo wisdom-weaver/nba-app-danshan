@@ -141,7 +141,6 @@ const InjuriesJSX = (props) => {
 
   return (
     <div className="">
-      <h5 className="center">Injuries JSX</h5>
       <div className="center">
         <input onChange={(e) => { set_search(e.target.value) }} type="text" value={search} placeholder="Search" />
       </div>
