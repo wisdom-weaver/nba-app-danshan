@@ -186,7 +186,7 @@ function InjuriesPage() {
   console.log('injury page')
   return (
     <div>
-      <h3 className="center">NBA Injuries</h3>
+      <h4 className="center">NBA Injuries</h4>
       <GetFromAPI api={get_sheet_url({ sheet_id, sheet_no })} >
         <InjuriesJSX />
       </GetFromAPI>

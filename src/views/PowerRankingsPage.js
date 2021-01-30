@@ -108,7 +108,7 @@ function PowerRankingsPage() {
   console.log('injury page')
   return (
     <div>
-      <h3 className="center">NBA Power Rankings</h3>
+      <h4 className="center">NBA Power Rankings</h4>
       <GetFromAPI api={get_sheet_url({ sheet_id, sheet_no })} >
         <PowerRankingsJSX />
       </GetFromAPI>
