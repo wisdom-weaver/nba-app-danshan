@@ -47,40 +47,40 @@ const injuries_key_mapping = [
 ]
 
 const structure_injuries_raw_data = ({ raw, search }) => {
-  var structured = {};
-  if (search?.length > 0) {
-    const filter = raw.filter(row =>
-      row.content.$t
-        .replace(' ', '')
-        .replace('player', '')
-        .replace('pos', '')
-        .replace('date', '')
-        .replace('injury', '')
-        .replace('status', '')
-        .replace('expectedreturn', '')
-        .replace('comments', '')
-        .replace(':', '')
-        .toLowerCase()
-      .includes(search.toLowerCase()));
-    raw = filter;
-  }
-
+  var structured = {}, stru_ar = [];
 
   for (var row of raw) {
     row = injuries_key_mapping.reduce((acc, { key_init, key_final, key_head }) => ({ ...acc, [key_final]: row[key_init]?.$t }), {})
+    stru_ar.push(row);
+  }
 
-    var team = row['team']
-    structured[team] = {
-      ...(structured[team] || []),
-      injuries: [...(structured[team]?.injuries || []), row]
+  console.log(stru_ar);
+
+  for (var row of stru_ar) {
+    var {player, team, position, updated, injury, injurystatus} = row;
+    if (!search || search.length != 0) {
+      var check = search.split(' ').reduce((acc, word) => (acc | [player, team, get_team_data(team).teamName, position, updated, injury, injurystatus].reduce((eac, match)=> eac | match.toLowerCase().replace(' ','').includes(word), false)), false)
+      if (check) {
+        structured[team] = {
+          ...(structured[team] || []),
+          injuries: [...(structured[team]?.injuries || []), row]
+        }
+      }
+    } else {
+      structured[team] = {
+        ...(structured[team] || []),
+        injuries: [...(structured[team]?.injuries || []), row]
+      }
     }
   }
+
   for (var team in structured) {
     structured[team] = {
       ...structured[team],
       ...get_team_data(team)
     }
   }
+  console.log({ structured });
   return structured
 }
 
@@ -131,12 +131,12 @@ const InjuriesJSX = (props) => {
   // console.log('injuries jsx props=>', props);
   const { api_data } = props;
   const raw = api_data.feed.entry;
-  console.log('injuries jsx raw=>', raw);
+  // console.log('injuries jsx raw=>', raw);
 
   const [search, set_search] = useState('');
 
   const structured = structure_injuries_raw_data({ raw, search });
-  console.log('injuries jsx strucured=>', structured);
+  // console.log('injuries jsx strucured=>', structured);
 
 
   return (
