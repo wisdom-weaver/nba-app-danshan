@@ -80,7 +80,8 @@ const PowerRankingsJSX = (props) => {
         <input onChange={(e) => { set_search(e.target.value) }} type="text" value={search} placeholder="Search" />
       </div>
       {
-        <table>
+        (structured && Object.keys(structured).length>0)?(
+          <table>
           <tbody>
             <tr>
               <th>Team</th>
@@ -91,6 +92,13 @@ const PowerRankingsJSX = (props) => {
             )}
           </tbody>
         </table>
+        ):(
+          <div className="card">
+            <div className="card-content">
+              <h5 className="center">Nothing Found</h5>
+            </div>
+          </div>
+        )
       }
     </div>
   )
