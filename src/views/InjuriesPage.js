@@ -54,7 +54,7 @@ const structure_injuries_raw_data = ({ raw, search }) => {
     stru_ar.push(row);
   }
 
-  console.log(stru_ar);
+  // console.log(stru_ar);
 
   for (var row of stru_ar) {
     var { player, team, position, updated, injury, injurystatus } = row;
@@ -74,7 +74,7 @@ const structure_injuries_raw_data = ({ raw, search }) => {
       ...get_team_data(team)
     }
   }
-  console.log({ structured });
+  // console.log({ structured });
   return structured
 }
 
@@ -164,7 +164,7 @@ const InjuriesJSX = (props) => {
       <div className="center">
         <input onChange={(e) => { set_search(e.target.value) }} type="text" value={search} placeholder="Search" />
       </div>
-      <p>{search}</p>
+      {/* <p>{search}</p> */}
       {(structured && Object.keys(structured).length > 0) ? (
         Object.keys(structured).map(team =>
           <>
@@ -184,7 +184,7 @@ const InjuriesJSX = (props) => {
 }
 
 function InjuriesPage() {
-  console.log('injury page')
+  // console.log('injury page')
   return (
     <div>
       <h5 className="center">NBA Injuries</h5>

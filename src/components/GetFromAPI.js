@@ -11,13 +11,12 @@ function GetFromAPI(props) {
   const init_fetch = () => {
     fetch(api)
       .then(resp => resp.json())
-      .then(data => { console.log('load success'); set_api_data(data); set_fetch_complete(true) })
+      .then(data => { set_api_data(data); set_fetch_complete(true) })
       .catch((err) => { set_fetch_complete(true) })
   }
 
   useEffect(() => {
     if (done_once) return;
-    console.log('fetching api', api);
     init_fetch();
     set_done_once(true);
   }, [done_once])

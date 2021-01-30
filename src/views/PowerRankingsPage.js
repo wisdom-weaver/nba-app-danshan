@@ -29,7 +29,7 @@ const structure_powerrankings_raw_data = ({ raw, search }) => {
     stru_ar.push(row);
   }
 
-  console.log(stru_ar);
+  // console.log(stru_ar);
 
   for (var row of stru_ar) {
     var { player, team, ranking } = row;
@@ -47,7 +47,7 @@ const structure_powerrankings_raw_data = ({ raw, search }) => {
       ...get_team_data(team)
     }
   }
-  console.log({ structured });
+  // console.log({ structured });
   return structured
 }
 
@@ -65,7 +65,7 @@ const PowerRankingsJSX = (props) => {
   // console.log('powerrankings jsx props=>', props);
   const { api_data } = props;
   const raw = api_data.feed.entry;
-  console.log('powerrankings jsx raw=>', raw);
+  // console.log('powerrankings jsx raw=>', raw);
 
   const [search, set_search] = useState('');
 
@@ -105,7 +105,7 @@ const PowerRankingsJSX = (props) => {
 }
 
 function PowerRankingsPage() {
-  console.log('injury page')
+  // console.log('injury page')
   return (
     <div>
       <h5 className="center">NBA Power Rankings</h5>
