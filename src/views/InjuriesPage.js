@@ -59,7 +59,7 @@ const structure_injuries_raw_data = ({ raw, search }) => {
   for (var row of stru_ar) {
     var { player, team, position, updated, injury, injurystatus } = row;
     var search_ar = [player, team, get_team_data(team).teamName, position, updated, injury, injurystatus];
-    var check = search && search.split(' ').reduce((acc, word) => (acc | search_ar.reduce((eac, match = '') => eac | match.toLowerCase().replace(' ', '').includes(word), false)), false)
+    var check = search && search.trim().toLowerCase().split(' ').reduce((acc, word) => (acc | search_ar.reduce((eac, match = '') => eac | match.toLowerCase().replace(' ', '').includes(word), false)), false)
     if ((search && check) || (!search || search.length == 0)) {
       structured[team] = {
         ...(structured[team] || []),
@@ -164,6 +164,7 @@ const InjuriesJSX = (props) => {
       <div className="center">
         <input onChange={(e) => { set_search(e.target.value) }} type="text" value={search} placeholder="Search" />
       </div>
+      <p>{search}</p>
       {(structured && Object.keys(structured).length > 0) ? (
         Object.keys(structured).map(team =>
           <>

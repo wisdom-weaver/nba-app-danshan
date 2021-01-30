@@ -35,7 +35,7 @@ const structure_powerrankings_raw_data = ({ raw, search }) => {
     var { player, team, ranking } = row;
     var search_ar = [team, get_team_data(team).teamName, ranking];
     
-    var check = search && search.split(' ').reduce((acc, word) => (acc | search_ar.reduce((eac, match = '') => eac | match.toLowerCase().replace(' ', '').includes(word), false)), false)
+    var check = search && search.trim().toLowerCase().split(' ').reduce((acc, word) => (acc | search_ar.reduce((eac, match = '') => eac | match.toLowerCase().replace(' ', '').includes(word), false)), false)
     if ((search && check) || (!search || search.length == 0)) {
         structured[team] = {ranking}
     }
