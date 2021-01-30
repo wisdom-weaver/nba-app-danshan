@@ -92,25 +92,51 @@ const EachTeamInjuries = ({ team_ob }) => {
 
           {injuries && injuries.length != 0 ? (
             <>
-              <table>
-                <tbody>
-                  <tr>
-                    {key_mapping_injuries.slice(2).map(({ key_head }) => (
-                      <th>{key_head}</th>
+              <div className="hide-on-small-only">
+                <table>
+                  <tbody>
+                    <tr>
+                      {key_mapping_injuries.slice(2).map(({ key_head }) => (
+                        <th>{key_head}</th>
+                      ))}
+                    </tr>
+                    {injuries?.map((inj) => (
+                      <>
+                        <tr>
+                          <th>{inj['player']}</th>
+                          {key_mapping_injuries.slice(3).map(({ key_final }) => (
+                            <td>{inj[key_final]}</td>
+                          ))}
+                        </tr>
+                      </>
                     ))}
-                  </tr>
-                  {injuries?.map((inj) => (
-                    <>
-                      <tr>
-                        <th>{inj['player']}</th>
-                        {key_mapping_injuries.slice(3).map(({ key_final }) => (
-                          <td>{inj[key_final]}</td>
-                        ))}
-                      </tr>
-                    </>
-                  ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
+              <div className="hide-on-med-and-up">
+              <table>
+                  <tbody>
+                    <tr>
+                      {key_mapping_injuries.slice(2,6).map(({ key_head }) => (
+                        <th>{key_head}</th>
+                      ))}
+                    </tr>
+                    {injuries?.map((inj) => (
+                      <>
+                        <tr>
+                          <th>{inj['player']}</th>
+                          {key_mapping_injuries.slice(3,6).map(({ key_final }) => (
+                            <td>{inj[key_final]}</td>
+                          ))}
+                        </tr>
+                        <tr>
+                          <td colSpan="4"><span className="head">status: </span>{inj[key_mapping_injuries[6].key_final]}</td>
+                        </tr>
+                      </>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </>
           ) : (
               <h6 className="center head">No Injuries</h6>
