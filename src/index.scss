@@ -41,7 +41,7 @@ body{
 
 .row-flex{
   display: flex !important;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }
 
@@ -195,4 +195,8 @@ body{
 .justify-center {  justify-content: center;}
 .justify-flex-start {  justify-content: flex-start;}
 .justify-space-around {  justify-content: space-around;}
+.align-space-between {  align-items: space-between;}
+.align-center {  align-items: center;}
+.align-flex-start {  align-items: flex-start;}
+.align-space-around {  align-items: space-around;}
 .align-self-flex-start {align-self: flex-start;}

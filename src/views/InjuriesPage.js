@@ -8,7 +8,7 @@ import { get_sheet_url, get_team_data } from '../utils/utils'
 const sheet_id = "1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk";
 const sheet_no = "7";
 
-const injuries_key_mapping = [
+const key_mapping_injuries = [
   {
     key_head: "Team",
     key_init: "gsx$teamid",
@@ -50,23 +50,17 @@ const structure_injuries_raw_data = ({ raw, search }) => {
   var structured = {}, stru_ar = [];
 
   for (var row of raw) {
-    row = injuries_key_mapping.reduce((acc, { key_init, key_final, key_head }) => ({ ...acc, [key_final]: row[key_init]?.$t }), {})
+    row = key_mapping_injuries.reduce((acc, { key_init, key_final, key_head }) => ({ ...acc, [key_final]: row[key_init]?.$t }), {})
     stru_ar.push(row);
   }
 
   console.log(stru_ar);
 
   for (var row of stru_ar) {
-    var {player, team, position, updated, injury, injurystatus} = row;
-    if (!search || search.length != 0) {
-      var check = search.split(' ').reduce((acc, word) => (acc | [player, team, get_team_data(team).teamName, position, updated, injury, injurystatus].reduce((eac, match)=> eac | match.toLowerCase().replace(' ','').includes(word), false)), false)
-      if (check) {
-        structured[team] = {
-          ...(structured[team] || []),
-          injuries: [...(structured[team]?.injuries || []), row]
-        }
-      }
-    } else {
+    var { player, team, position, updated, injury, injurystatus } = row;
+    var search_ar = [player, team, get_team_data(team).teamName, position, updated, injury, injurystatus];
+    var check = search && search.split(' ').reduce((acc, word) => (acc | search_ar.reduce((eac, match = '') => eac | match.toLowerCase().replace(' ', '').includes(word), false)), false)
+    if ((search && check) || (!search || search.length == 0)) {
       structured[team] = {
         ...(structured[team] || []),
         injuries: [...(structured[team]?.injuries || []), row]
@@ -101,7 +95,7 @@ const EachTeamInjuries = ({ team_ob }) => {
               <table>
                 <tbody>
                   <tr>
-                    {injuries_key_mapping.slice(2).map(({ key_head }) => (
+                    {key_mapping_injuries.slice(2).map(({ key_head }) => (
                       <th>{key_head}</th>
                     ))}
                   </tr>
@@ -109,7 +103,7 @@ const EachTeamInjuries = ({ team_ob }) => {
                     <>
                       <tr>
                         <th>{inj['player']}</th>
-                        {injuries_key_mapping.slice(3).map(({ key_final }) => (
+                        {key_mapping_injuries.slice(3).map(({ key_final }) => (
                           <td>{inj[key_final]}</td>
                         ))}
                       </tr>
@@ -158,7 +152,7 @@ function InjuriesPage() {
   console.log('injury page')
   return (
     <div>
-      <h1 className="center">NBA Injuries</h1>
+      <h3 className="center">NBA Injuries</h3>
       <GetFromAPI api={get_sheet_url({ sheet_id, sheet_no })} >
         <InjuriesJSX />
       </GetFromAPI>

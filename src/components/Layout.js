@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom';
 import bettorsightLogo from "../static/bettorsight-logo.svg";
 
 function Layout(props) {
@@ -6,6 +7,11 @@ function Layout(props) {
     <div className="container">
       <div className="logo-continer">
         <img src={bettorsightLogo} alt="" />
+      </div>
+      <div className="row-flex ">
+        <NavLink to="/powerrankings"><div className="btn black-btn m5">Power Rankings</div></NavLink>
+        <NavLink to="/injuries"><div className="btn black-btn m5">Injuries</div></NavLink>
+        <NavLink to="/trends"><div className="btn black-btn m5">Trends</div></NavLink>
       </div>
       <div className="rankings-container">
         <div className="row">
