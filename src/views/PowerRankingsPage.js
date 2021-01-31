@@ -55,7 +55,7 @@ const EachTeamPowerRanking = ({ team_ob }) => {
   const { teamName, teamImg, ranking } = team_ob;
   return (
     <tr>
-      <td><div className="col-flex align-flex-start"><SmallLogo image={teamImg} /> <span>{teamName}</span></div></td>
+      <td><div className="row-flex justify-flex-start"><SmallLogo image={teamImg} /> <span>{teamName}</span></div></td>
       <td>{ranking}</td>
     </tr>
   )
@@ -71,7 +71,7 @@ const PowerRankingsJSX = (props) => {
 
   // const structured = {};
   const structured = structure_powerrankings_raw_data({ raw, search });
-  // console.log('powerrankings jsx strucured=>', structured);
+  console.log('powerrankings jsx strucured=>', structured);
 
 
   return (
@@ -109,7 +109,10 @@ function PowerRankingsPage() {
   return (
     <div>
       <h5 className="center">NBA Power Rankings</h5>
-      <GetFromAPI api={get_sheet_url({ sheet_id, sheet_no })} >
+      <GetFromAPI
+        // api={"https://spreadsheets.google.com/feeds/list/1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk/8/public/values?alt=json"}
+        api={get_sheet_url({ sheet_id, sheet_no })}
+      >
         <PowerRankingsJSX />
       </GetFromAPI>
     </div>
