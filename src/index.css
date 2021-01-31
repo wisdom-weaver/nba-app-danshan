@@ -329,4 +329,19 @@ body {
 .align-self-flex-start {
   -ms-flex-item-align: start;
       align-self: flex-start;
+}
+
+.small-table {
+  font-size: 12px;
+}
+
+.resp-card-content {
+  max-width: 100% !important;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 600px) {
+  .resp-card-content {
+    padding: 4px !important;
+  }
 }/*# sourceMappingURL=index.css.map */

@@ -200,3 +200,16 @@ body{
 .align-flex-start {  align-items: flex-start;}
 .align-space-around {  align-items: space-around;}
 .align-self-flex-start {align-self: flex-start;}
+
+.small-table{
+  font-size: 12px;
+}
+.resp-card-content{
+  max-width: 100% !important;
+  overflow: hidden;
+}
+@media screen and (max-width: 600px){
+  .resp-card-content{
+    padding: 4px !important;
+  } 
+}

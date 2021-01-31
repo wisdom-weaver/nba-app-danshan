@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import GetFromAPI from '../components/GetFromAPI'
 import LargeLogo from '../components/LargeLogo';
 import SmallLogo from '../components/SmallLogo';
-import { get_sheet_url, get_team_data } from '../utils/utils'
+import { get_all_teams, get_sheet_url, get_team_data } from '../utils/utils'
 
 const sheet_id = "1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk";
 const sheet_no = "7";
@@ -46,15 +46,21 @@ const key_mapping_injuries = [
   },
 ]
 
+const isEmpty = (search)=>(!search || search.length == 0)
+const match_in_search = ({search,match})=>(
+  search && match && search.trim().toLowerCase().split(' ').reduce((sac, word)=>(
+    sac|match.trim().toLowerCase().replace(" ",'').includes(word)
+  ),false)
+)
+
 const structure_injuries_raw_data = ({ raw, search }) => {
   var structured = {}, stru_ar = [];
-
   for (var row of raw) {
     row = key_mapping_injuries.reduce((acc, { key_init, key_final, key_head }) => ({ ...acc, [key_final]: row[key_init]?.$t }), {})
     stru_ar.push(row);
   }
+  get_all_teams().map(team=>{stru_ar.push({team})});
 
-  // console.log(stru_ar);
 
   for (var row of stru_ar) {
     var { player, team, position, updated, injury, injurystatus } = row;
@@ -63,18 +69,17 @@ const structure_injuries_raw_data = ({ raw, search }) => {
     if ((search && check) || (!search || search.length == 0)) {
       structured[team] = {
         ...(structured[team] || []),
-        injuries: [...(structured[team]?.injuries || []), row]
+        injuries: player ? [...(structured[team]?.injuries || []), row] : structured[team]?.injuries
       }
     }
   }
-
   for (var team in structured) {
     structured[team] = {
       ...structured[team],
       ...get_team_data(team)
     }
   }
-  // console.log({ structured });
+  console.log({ structured });
   return structured
 }
 
@@ -83,7 +88,7 @@ const EachTeamInjuries = ({ team_ob }) => {
   return (
     <>
       <div className="card">
-        <div className="card-content">
+        <div className="card-content resp-card-content">
           <div className="row-flex flex-start">
             <LargeLogo image={teamImg} />
             <h5 className="bold center">{teamName}</h5>
@@ -114,7 +119,7 @@ const EachTeamInjuries = ({ team_ob }) => {
                 </table>
               </div>
               <div className="hide-on-med-and-up">
-              <table>
+              <table className="small-table">
                   <tbody>
                     <tr>
                       {key_mapping_injuries.slice(2,6).map(({ key_head }) => (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
 import Layout from './components/Layout';
 import InjuriesPage from './views/InjuriesPage';
 import PowerRankingsPage from './views/PowerRankingsPage';
@@ -8,7 +8,7 @@ import PowerRankingsPage from './views/PowerRankingsPage';
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <HashRouter>
         <Switch>
           <Route exact path="/">
             <Layout>
@@ -24,13 +24,8 @@ function App() {
               <PowerRankingsPage />
             </Layout>
           </Route>
-          <Route exact path="/trends">
-            <Layout>
-              
-            </Layout>
-          </Route>
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }

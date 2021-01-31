@@ -9,7 +9,13 @@ const fetch_data = (url) => {
 };
 
 export const get_team_data = (team)=>{
-    return teamDataJSON[team];
+    if (team == '76ers' || team == 'Seventysixers') return teamDataJSON['Seventysixers'] || {};
+    if (team == 'Blazers' || team == 'Trailblazers') return teamDataJSON['Trailblazers'] || {};
+    return teamDataJSON[team] || {};
+}
+
+export const get_all_teams = ()=>{
+    return Object.keys(teamDataJSON);
 }
 
 export const get_sheet_url = ({ sheet_id, sheet_no }) =>
