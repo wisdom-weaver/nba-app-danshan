@@ -292,10 +292,10 @@ export const MatchupTab = ({ statA, statB }) => {
   const matchA = (statA && statA?.stats?.matchup) || {};
   const { teamB, teamB_Img, colorB } = statB;
   const matchB = (statB && statB?.stats?.matchup) || {};
-
+  // console.log('matchup tab', matchA, matchB)
   const ats_records = key_mapping_matchup.slice(1, 6);
   const team_matchup = [
-    ...key_mapping_matchup_sag,
+    ...key_mapping_matchup_sag.slice(1),
     ...key_mapping_matchup.slice(6),
   ];
 
@@ -312,15 +312,15 @@ export const MatchupTab = ({ statA, statB }) => {
           <div className="spacing-10px"></div>
 
           <SingleStat
-            statLeft={matchA && matchA[stat_row.key]}
-            statRight={matchB && matchB[stat_row.key]}
+            statLeft={matchA && matchA[stat_row.key_final]}
+            statRight={matchB && matchB[stat_row.key_final]}
             side={
               stat_row.side_eval
-                ? stat_row.side_eval(matchA[stat_row.key], matchB[stat_row.key])
+                ? stat_row.side_eval(matchA[stat_row.key_final], matchB[stat_row.key_final])
                 : -1
             }
             show_line={true}
-            statTitle={stat_row.head}
+            statTitle={stat_row.key_head}
             {...{ colorA, colorB }}
           />
         </>
@@ -337,15 +337,15 @@ export const MatchupTab = ({ statA, statB }) => {
           <div className="spacing-10px"></div>
 
           <SingleStat
-            statLeft={matchA && matchA[stat_row.key]}
-            statRight={matchB && matchB[stat_row.key]}
+            statLeft={matchA && matchA[stat_row.key_final]}
+            statRight={matchB && matchB[stat_row.key_final]}
             side={
               stat_row.side_eval
-                ? stat_row.side_eval(matchA[stat_row.key], matchB[stat_row.key])
+                ? stat_row.side_eval(matchA[stat_row.key_final], matchB[stat_row.key_final])
                 : -1
             }
             show_line={true}
-            statTitle={stat_row.head}
+            statTitle={stat_row.key_head}
             {...{ colorA, colorB }}
           />
         </>

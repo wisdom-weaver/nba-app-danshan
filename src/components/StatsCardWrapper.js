@@ -24,12 +24,9 @@ const get_each_config = async ({ config, category, subcategory }) => {
 
 function StatsCardWrapper(props) {
   const {
-    post_fetch_api_at_stat_key,
     category,
     subcategory,
     configs,
-    match_api,
-    sag_api,
   } = props;
 
   const [inti_once, set_inti_once] = useState(false);

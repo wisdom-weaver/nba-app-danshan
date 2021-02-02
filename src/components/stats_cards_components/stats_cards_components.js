@@ -73,7 +73,9 @@ export const SingleStat = ({
   );
 };
 
-export const get_n = (n) => parseFloat(n.split(" ").reverse()[0]);
+export const get_n = (n) => {
+  parseFloat(n?.split(" ")?.reverse()[0] || '')
+};
 export const higher_better = (a, b) => {
   a = get_n(a);
   b = get_n(b);

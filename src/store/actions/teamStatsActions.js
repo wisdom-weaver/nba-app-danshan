@@ -34,13 +34,15 @@ export const get_team_stats_at_key_only_action = ({ team, category, subcategory,
     }
   };
 };
-export const get_all_team_stats_action = ({ team, category, subcategory, keys }) => {
+export const get_all_team_stats_action = (ob) => {
   return (dispach, getState) => {
+    const { team, category, subcategory, keys } = ob;
     const store = getState();
     try {
-      return Object.fromEntries(
-        ['a', ]
+      return  Object.fromEntries(
+        keys.map(key=>[key, dispach(get_team_stats_at_key_only_action({...ob, key}))])
       )
+      
     } catch (err) {
       return {};
     }
