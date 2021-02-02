@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -9,6 +10,7 @@ body {
   background: white;
   max-width: 100%;
   width: 100%;
+  font-family: "Quicksand", sans-serif;
 }
 
 .small-logo-container {
@@ -109,6 +111,10 @@ body {
 
 .spacing-30px {
   min-height: 30px;
+}
+
+.barline {
+  margin: 6px 0px;
 }
 
 ::-webkit-scrollbar {
@@ -231,6 +237,10 @@ body {
   max-width: 100%;
 }
 
+.mh-10px {
+  min-height: 5px;
+}
+
 .margin-bottom-5px {
   margin-bottom: 5px;
 }
@@ -344,4 +354,63 @@ body {
   .resp-card-content {
     padding: 4px !important;
   }
+}
+.m0 {
+  margin: 0;
+}
+
+.round-card, .stats-tabs {
+  border-radius: 15px;
+}
+
+.stats-tabs li a {
+  color: #e78a18 !important;
+  font-size: 13px !important;
+  text-transform: inherit;
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
+}
+.stats-tabs li a.active {
+  font-weight: 900;
+  color: #e78a18 !important;
+}
+.stats-tabs .indicator {
+  background-color: rgba(231, 138, 24, 0.7) !important;
+}
+
+.m-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.w-200px {
+  width: 200px;
+}
+
+.max_w-200px {
+  max-width: 200px;
+}
+
+.w-250px {
+  width: 250px;
+}
+
+.max_w-250px {
+  max-width: 250px;
+}
+
+.w-150px {
+  width: 150px;
+}
+
+.max_w-150px {
+  max-width: 150px;
+}
+
+.w-125px {
+  width: 125px;
+}
+
+.max_w-125px {
+  max-width: 125px;
 }/*# sourceMappingURL=index.css.map */

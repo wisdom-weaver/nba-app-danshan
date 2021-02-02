@@ -1,9 +1,13 @@
-import React from 'react';
-import { Route, Switch } from 'react-router';
-import { BrowserRouter, HashRouter } from 'react-router-dom';
-import Layout from './components/Layout';
-import InjuriesPage from './views/InjuriesPage';
-import PowerRankingsPage from './views/PowerRankingsPage';
+import React from "react";
+import { connect, useSelector } from "react-redux";
+import { Route, Switch } from "react-router";
+import { BrowserRouter, HashRouter } from "react-router-dom";
+import { compose } from "redux";
+import Layout from "./components/Layout";
+import GamePage from "./views/GamePage";
+import InjuriesPage from "./views/InjuriesPage";
+import PowerRankingsPage from "./views/PowerRankingsPage";
+import TeamPage from "./views/TeamPage";
 
 function App() {
   return (
@@ -11,8 +15,7 @@ function App() {
       <HashRouter>
         <Switch>
           <Route exact path="/">
-            <Layout>
-            </Layout>
+            <Layout></Layout>
           </Route>
           <Route exact path="/injuries">
             <Layout>
@@ -24,10 +27,27 @@ function App() {
               <PowerRankingsPage />
             </Layout>
           </Route>
+          <Route exact path="/team/:teamid">
+            <TeamPage />
+          </Route>
+          <Route exact path="/game/:gameid">
+            <GamePage />
+          </Route>
         </Switch>
       </HashRouter>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state)=>{
+  console.log('state=>', state);
+  return {}
+}
+
+const mapDispatchToProps = (dispatch)=>{
+  return {}
+}
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(App);
