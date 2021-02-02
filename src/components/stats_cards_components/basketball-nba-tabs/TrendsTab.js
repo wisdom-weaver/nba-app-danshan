@@ -60,10 +60,10 @@ export const structure_trends_data = (data_ar) => {
     raw: raw_trends,
     key_mapping: key_mapping_trends,
   });
-  console.log("raw_trends", raw_trends);
+  // console.log("raw_trends", raw_trends);
   var str_trends = _.keyBy(raw_trends, "team");
   delete str_trends[""];
-  console.log("str_trends", str_trends);
+  // console.log("str_trends", str_trends);
   return { stat_structure: str_trends, stat_key: "trends" };
 };
 
@@ -72,7 +72,7 @@ export const TrendsTab = ({ statA, statB }) => {
   const trendsA = (statA && statA?.stats?.trends) || {};
   const { teamB, teamB_Img, colorB } = statB;
   const trendsB = (statB && statB?.stats?.trends) || {};
-  console.log("trends", { trendsA, trendsB },);
+  // console.log("trends", { trendsA, trendsB },);
   // return <></>
   return (trendsA && Object.keys(trendsA).length != 0) ||
     (trendsB && Object.keys(trendsB).length != 0) ? (

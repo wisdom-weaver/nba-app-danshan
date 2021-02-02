@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { compose } from "redux";
-import { post_fetch_api_at_stat_key } from "../views/StatsTabsCard2";
+import { set_status_at_key_action } from "../store/actions/teamStatsActions";
+import {
+  dispatch_status_loaded,
+  post_fetch_api_at_stat_key,
+} from "../views/StatsTabsCard";
 import { structure_matchup_data } from "./stats_cards_components/basketball-nba-tabs/MatchTab";
+import { store } from "../index";
 
-const get_each_config = async ({ config, category, subcategory }) => {
+const get_each_config = async ({ config, category, subcategory, dispatch }) => {
   const [key, ob] = config;
   const { apis, structure_data } = ob;
   var data_ar = [];
+  dispatch(
+    set_status_at_key_action({
+      category,
+      subcategory,
+      status_key: key,
+      status_update: "loading",
+    })
+  );
   for (var i = 0; i < apis.length; i++) {
     await fetch(apis[i])
       .then((resp) => resp.json())
@@ -20,22 +33,29 @@ const get_each_config = async ({ config, category, subcategory }) => {
     subcategory,
     structure_data,
   });
+  dispatch(
+    set_status_at_key_action({
+      category,
+      subcategory,
+      status_key: key,
+      status_update: "loaded",
+    })
+  );
 };
 
 function StatsCardWrapper(props) {
-  const {
-    category,
-    subcategory,
-    configs,
-  } = props;
+  const dispatch = useDispatch();
+  const { category, subcategory, configs } = props;
 
   const [inti_once, set_inti_once] = useState(false);
+  const {status, stats} = useSelector(({teamStats})=>teamStats[category][subcategory])
   const init_fetch = () => {
     var data_ar = [];
     set_inti_once(true);
-    Object.entries(configs).forEach((config) =>
-      get_each_config({ config, category, subcategory })
-    );
+    Object.entries(configs).forEach((config) => {
+      if(status[config[0]]=='loaded') return;
+      else get_each_config({ config, category, subcategory, dispatch });
+    });
   };
   useEffect(() => {
     if (inti_once) return;

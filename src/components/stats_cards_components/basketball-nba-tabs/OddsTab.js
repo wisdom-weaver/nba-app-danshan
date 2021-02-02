@@ -56,10 +56,10 @@ export const structure_odds_data = (data_ar) => {
     raw: raw_odds,
     key_mapping: key_mapping_odds,
   });
-  console.log("raw_odds", raw_odds);
+  // console.log("raw_odds", raw_odds);
   var str_odds = _.keyBy(raw_odds, "team");
   delete str_odds[""];
-  console.log("str_odds", str_odds);
+  // console.log("str_odds", str_odds);
   return { stat_structure: str_odds, stat_key: "odds" };
 };
 
@@ -68,7 +68,7 @@ export const OddsTab = ({ statA, statB }) => {
   const oddsA = (statA && statA?.stats["odds"]) || {};
   const { teamB, teamB_Img, colorB } = statB;
   const oddsB = (statB && statB?.stats["odds"]) || {};
-  console.log("odds", { oddsA, oddsB });
+  // console.log("odds", { oddsA, oddsB });
   // return <></>
   return (
     <div className="card-content">

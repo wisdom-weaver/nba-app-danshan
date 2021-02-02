@@ -10,8 +10,21 @@ export const updateTeamStatsAction = (obj) => {
 
 export const set_stats_at_key_action = (obj) => {
   return (dispach, getState) => {
-    // console.log('in updateTeamStatsAction', obj)
-    return dispach({ type: "SET_STATS_AT_KEY", ...obj });
+    try{
+      return dispach({ type: "SET_STATS_AT_KEY", ...obj });
+    }catch(err){
+      console.log('err in updateTeamStatsAction', obj)
+    }
+  };
+};
+
+export const set_status_at_key_action = (obj) => {
+  return (dispach, getState) => {
+    try{
+      return dispach({ type: "SET_STATUS_AT_KEY", ...obj });
+    }catch(err){
+      console.log('err in updateTeamStatsAction', obj, err.message)
+    }
   };
 };
 
@@ -30,7 +43,7 @@ export const get_team_stats_at_key_only_action = ({ team, category, subcategory,
     try {
       return getState().teamStats[category][subcategory].stats[key][team];
     } catch (err) {
-      return {};
+      return [];
     }
   };
 };
@@ -44,7 +57,7 @@ export const get_all_team_stats_action = (ob) => {
       )
       
     } catch (err) {
-      return {};
+      return [];
     }
   };
 };

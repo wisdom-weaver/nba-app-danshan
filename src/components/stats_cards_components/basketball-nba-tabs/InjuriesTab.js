@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { useState } from "react";
 import LargeLogo from "../../LargeLogo";
 import { structure_raw_row_from_key_mapping } from "../stats_cards_components";
 
@@ -51,10 +52,10 @@ export const structure_injuries_data = (data_ar) => {
     raw: raw_injuries,
     key_mapping: key_mapping_injuries,
   });
-  console.log("raw_injuries", raw_injuries);
+  // console.log("raw_injuries", raw_injuries);
   var str_injuries = _.groupBy(raw_injuries, "team");
   delete str_injuries[""];
-  console.log("str_injuries", str_injuries);
+  // console.log("str_injuries", str_injuries);
   return { stat_structure: str_injuries, stat_key: "injuries" };
 };
 
@@ -63,18 +64,17 @@ export const InjuriesTab = ({ statA, statB }) => {
   const injuriesA = (statA && statA?.stats?.injuries) || [];
   const { teamB, teamB_Img, colorB } = statB;
   const injuriesB = (statB && statB?.stats?.injuries) || [];
-  const injuries_big_ar = [
+  const [injuries_big_ar, set_in_big] = useState([
     { injuries: injuriesA, team_Img: teamA_Img, team: teamA },
     { injuries: injuriesB, team_Img: teamB_Img, team: teamB },
-  ];
-  console.log("injuries_big_ar", injuries_big_ar);
+  ] || []);
+  // console.log("injuries_big_ar", injuries_big_ar);
+  // console.log("injuries", {injuriesA, injuriesB});
+  // return <></>
   return (
     <div className="card-content">
       <h5 className="center">Injuries</h5>
-      {([
-        { injuries: injuriesA || [], team_Img: teamA_Img, team: teamA },
-        { injuries: injuriesB || [], team_Img: teamB_Img, team: teamB },
-      ] || [])?.map(({ injuries= [], team_Img, team }) => (
+      {injuries_big_ar && injuries_big_ar?.map(({ injuries, team_Img = '', team= '' }) => (
         <>
           <div className="row-flex flex-start">
             <LargeLogo image={team_Img} />
@@ -129,7 +129,7 @@ export const InjuriesTab = ({ statA, statB }) => {
                       <th>Updated</th>
                       <th>Injury</th>
                     </tr>
-                    {injuries?.map(
+                    {injuries && injuries?.map(
                       ({
                         player,
                         position,
