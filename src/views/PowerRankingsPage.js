@@ -71,7 +71,7 @@ const PowerRankingsJSX = (props) => {
 
   // const structured = {};
   const structured = structure_powerrankings_raw_data({ raw, search });
-  console.log('powerrankings jsx strucured=>', structured);
+  // console.log('powerrankings jsx strucured=>', structured);
 
 
   return (

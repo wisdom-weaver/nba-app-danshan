@@ -124,7 +124,7 @@ const structure_injuries_raw_data = ({ raw, search }) => {
       ...get_team_data(team),
     };
   }
-  console.log({ structured });
+  // console.log({ structured });
   return structured;
 };
 
