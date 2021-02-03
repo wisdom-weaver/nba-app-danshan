@@ -146,7 +146,7 @@ const EachTeamInjuries = ({ team_ob }) => {
                   <tbody>
                     <tr>
                       <th>Player</th>
-                      <th>Position</th>
+                      <th>Pos/Imp</th>
                       <th>Updated</th>
                       <th>Injury</th>
                       <th>Injury Status</th>
@@ -181,7 +181,7 @@ const EachTeamInjuries = ({ team_ob }) => {
                   <tbody>
                     <tr>
                       <th>Player</th>
-                      <th>Position</th>
+                      <th>Pos/Imp</th>
                       <th>Updated</th>
                       <th>Injury</th>
                     </tr>

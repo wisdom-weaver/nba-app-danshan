@@ -27,12 +27,12 @@ function App() {
               <PowerRankingsPage />
             </Layout>
           </Route>
-          <Route exact path="/team/:teamid">
+          {/* <Route exact path="/team/:teamid">
             <TeamPage />
           </Route>
           <Route exact path="/game/:gameid">
             <GamePage />
-          </Route>
+          </Route> */}
         </Switch>
       </HashRouter>
     </div>
