@@ -11,7 +11,7 @@ import PowerRankingsPage from "./views/PowerRankingsPage";
 import TeamPage from "./views/TeamPage";
 
 function App() {
-  console.log(get_team_key({ team:'Hawks', category:'basketball', subcategory:'nba' }));
+  // console.log(get_team_key({ team:'Hawks', category:'basketball', subcategory:'nba' }));
   return (
     <div className="App">
       <HashRouter>

@@ -28,7 +28,7 @@ export const structure_streaks_data = (data_ar) => {
     game = `${teams[0]} vs ${teams[1]}`;
     return { ...ea, game };
   });
-  console.log("raw_streaks", raw_streaks);
+  // console.log("raw_streaks", raw_streaks);
 
 
   const str_streaks = raw_streaks.reduce((acc,{game,streaks})=>({
