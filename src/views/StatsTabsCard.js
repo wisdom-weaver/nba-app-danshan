@@ -24,7 +24,7 @@ import {
   set_stats_at_key_action,
   set_status_at_key_action,
 } from "../store/actions/teamStatsActions";
-import { get_colors_combo, get_team_data } from "../utils/utils";
+import { get_colors_combo, get_team_data_from_any_name } from "../utils/utils";
 import { TrendsTab } from "../components/stats_cards_components/basketball-nba-tabs/TrendsTab";
 import { StreaksTab } from "../components/stats_cards_components/basketball-nba-tabs/StreaksTab";
 
@@ -78,7 +78,7 @@ const get_team_stats = ({ team, configs, category, subcategory, stats }) => {
 };
 
 function StatsTabsCard(props) {
-  console.log("StatsTabCard 2");
+  // console.log("StatsTabCard 2");
   const dispatch = useDispatch();
 
   const { category, subcategory, GameID, teamsData } = props;
@@ -115,8 +115,8 @@ function StatsTabsCard(props) {
       </>
     );
 
-  const team_dataA = get_team_data(teamA_mini);
-  const team_dataB = get_team_data(teamB_mini);
+  const team_dataA = get_team_data_from_any_name({team: teamA_mini, category, subcategory});
+  const team_dataB = get_team_data_from_any_name({team: teamB_mini, category, subcategory});
   const keys = ["matchup", "injuries", "odds", "trends"];
 
   const { colorA, colorB } = get_colors_combo({
@@ -160,7 +160,7 @@ function StatsTabsCard(props) {
     }
   })();
 
-  console.log("stats", { statA, statB });
+  // console.log("stats", { statA, statB });
   // console.log("streaks", streak_game_id, streaks);
 
   return (

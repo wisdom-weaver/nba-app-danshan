@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useRouteMatch } from "react-router";
 import LargeLogo from "../components/LargeLogo";
 import StatsCardWrapper from "../components/StatsCardWrapper";
-import { get_team_data } from "../utils/utils";
+import { get_team_data_from_any_name } from "../utils/utils";
 // import StatsTabsCard, { statsPostFetchFn } from "./StatsTabsCard";
 import StatsTabsCard, { post_fetch_api_at_stat_key } from "./StatsTabsCard";
 import {
@@ -15,6 +15,8 @@ import { structure_injuries_data } from "../components/stats_cards_components/ba
 import { structure_odds_data } from "../components/stats_cards_components/basketball-nba-tabs/OddsTab";
 import { structure_trends_data } from "../components/stats_cards_components/basketball-nba-tabs/TrendsTab";
 import { structure_streaks_data } from "../components/stats_cards_components/basketball-nba-tabs/StreaksTab";
+
+const category='baskettball', subcategory='nba';
 
 function GamePage(props) {
   const dispatch = useDispatch();
@@ -28,8 +30,9 @@ function GamePage(props) {
     (ea) => ea.split(" ").reverse()[0]
   );
 
-  const teamAData = get_team_data(teamA_mini);
-  const teamBData = get_team_data(teamB_mini);
+  const teamAData = get_team_data_from_any_name({team: teamA_mini, category, subcategory});
+  const teamBData = get_team_data_from_any_name({team: teamB_mini, category, subcategory});
+  console.log({teamAData, teamBData});
   const teamsData = {
     teamA: teamAData.teamName,
     teamA_Img: teamAData.teamImg,

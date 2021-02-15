@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { get_team_key } from '../../../utils/utils';
 import {
   both,
   higher_better,
@@ -272,11 +273,16 @@ const key_mapping_matchup_sag = [
   },
 ];
 
+const category = 'basketball', subcategory='nba';
+
 export const structure_matchup_data = (data_ar) => {
   var raw_matchup = data_ar[0].feed.entry;
   var raw_matchup_sag = data_ar[1].feed.entry;
   raw_matchup = structure_raw_row_from_key_mapping({raw: raw_matchup, key_mapping: key_mapping_matchup});
+  raw_matchup = raw_matchup.map(ea=>({...ea, team:get_team_key({team: ea.team, category, subcategory})}));
   raw_matchup_sag = structure_raw_row_from_key_mapping({raw: raw_matchup_sag, key_mapping: key_mapping_matchup_sag});
+  raw_matchup_sag = raw_matchup_sag.map(ea=>({...ea, team:get_team_key({team: ea.team, category, subcategory})}));
+
   // console.log("raw_matchup=>", raw_matchup);
   
   var str_matchup =  _.keyBy(

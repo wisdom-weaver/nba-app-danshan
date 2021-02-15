@@ -1,280 +1,102 @@
-import { functionsIn } from "lodash";
+// import { functionsIn } from "lodash";
 import React, { useState } from "react";
-import GetFromAPI from "../components/GetFromAPI";
+import { useSelector } from "react-redux";
+// import GetFromAPI from "../components/GetFromAPI";
 import LargeLogo from "../components/LargeLogo";
 import SmallLogo from "../components/SmallLogo";
-import { get_all_teams, get_sheet_url, get_team_data } from "../utils/utils";
+import StatsCardWrapper from "../components/StatsCardWrapper";
+import { TeamInjuries } from "../components/stats_cards_components/basketball-nba-tabs/InjuriesTab";
+import { get_all_teams_names } from "../utils/utils";
+import StatsTabsCard, { post_fetch_api_at_stat_key } from "./StatsTabsCard";
 
-const sheet_id = "1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk";
-const sheet_no = "7";
+const category = 'basketball';
+const subcategory='nba';
 
-const key_mapping_injuries = [
-  {
-    key_head: "Team",
-    key_init: "gsx$teamid",
-    key_final: "team",
-  },
-  {
-    key_head: "Team",
-    key_init: "gsx$team",
-    key_final: "teams",
-  },
-  {
-    key_head: "Player",
-    key_init: "gsx$player",
-    key_final: "player",
-  },
-  {
-    key_head: "Position",
-    key_init: "gsx$position",
-    key_final: "position",
-  },
-  {
-    key_head: "Updated",
-    key_init: "gsx$updated",
-    key_final: "updated",
-  },
-  {
-    key_head: "Injury",
-    key_init: "gsx$injury",
-    key_final: "injury",
-  },
-  {
-    key_head: "Injury Status",
-    key_init: "gsx$injurystatus",
-    key_final: "injurystatus",
-  },
-  {
-    key_head: "PositionNo",
-    key_init: "gsx$positionno",
-    key_final: "positionno",
-  }
-];
-
-const isEmpty = (search) => !search || search.length == 0;
-const match_in_search = ({ search, match }) =>
-  search &&
-  match &&
-  search
-    .trim()
-    .toLowerCase()
-    .split(" ")
-    .reduce(
-      (sac, word) =>
-        sac | match.trim().toLowerCase().replace(" ", "").includes(word),
-      false
-    );
-
-const structure_injuries_raw_data = ({ raw, search }) => {
-  var structured = {},
-    stru_ar = [];
-  for (var row of raw) {
-    row = key_mapping_injuries.reduce(
-      (acc, { key_init, key_final, key_head }) => ({
-        ...acc,
-        [key_final]: row[key_init]?.$t,
-      }),
-      {}
-    );
-    stru_ar.push(row);
-  }
-  get_all_teams().map((team) => {
-    stru_ar.push({ team });
-  });
-
-  for (var row of stru_ar) {
-    var { player, team, position, updated, injury, injurystatus } = row;
-    var search_ar = [
-      player,
-      team,
-      get_team_data(team).teamName,
-      position,
-      updated,
-      injury,
-      injurystatus,
-    ];
-    var check =
-      search &&
-      search
-        .trim()
-        .toLowerCase()
-        .split(" ")
-        .reduce(
-          (acc, word) =>
-            acc |
-            search_ar.reduce(
-              (eac, match = "") =>
-                eac | match.toLowerCase().replace(" ", "").includes(word),
-              false
-            ),
-          false
-        );
-    if ((search && check) || !search || search.length == 0) {
-      structured[team] = {
-        ...(structured[team] || []),
-        injuries: player
-          ? [...(structured[team]?.injuries || []), row]
-          : structured[team]?.injuries,
-      };
+const filter  = ({search, injuries_all})=>{
+  // search = search.trim()
+  if(!search) return false;
+  search = search.split(' ');;
+  
+  injuries_all = Object.entries(injuries_all);
+  injuries_all = injuries_all.map(([team, teaminjs])=>{
+    var count = 0;
+    for(var inj of teaminjs){
+      var {team, player, position, positionno, updated, injury, injurystatus} = inj;
+      search.map(word=>{
+        if(!word) return;
+        word = word.toLowerCase()
+        if(team && team.toLowerCase().includes(word)) count+=100;
+        if(player && player.toLowerCase().includes(word)) count+=25;
+        if(injury && injury.toLowerCase().includes(word)) count+=10;
+        if(updated && updated.toLowerCase().includes(word)) count+=5;
+        if(position && position.toLowerCase().includes(word)) count+=5;
+        if(injurystatus && injurystatus.toLowerCase().includes(word)) count+=5;
+      },0)
     }
-  }
-  for (var team in structured) {
-    structured[team] = {
-      ...structured[team],
-      ...get_team_data(team),
-    };
-  }
-  // console.log({ structured });
-  return structured;
-};
+    return {team, count}
+  })
+  var sorted = injuries_all.filter(ea=>ea.count!=0).sort((a,b)=>b.count>a.count).map(({team})=>team);
+  console.log(sorted, injuries_all);
+  return sorted;
+}
 
-const EachTeamInjuries = ({ team_ob }) => {
-  const { teamName, teamImg, injuries } = team_ob;
+const InjuriesJSX = ({ teams, rankings_all }) => {
   return (
     <>
+      {(teams && teams.length>0) &&
+        teams.map(team=> <TeamInjuries {...{team, category, subcategory}}/>)
+      }
+      {(!teams || !(teams?.length>0)) && 
       <div className="card">
-        <div className="card-content resp-card-content">
-          <div className="row-flex flex-start">
-            <LargeLogo image={teamImg} />
-            <h5 className="bold center">{teamName}</h5>
-          </div>
-          <div className="spacing-10px"></div>
-          {injuries && injuries.length != 0 ? (
-            <>
-              <div className="hide-on-small-only">
-                <table>
-                  <tbody>
-                    <tr>
-                      <th>Player</th>
-                      <th>Pos/Imp</th>
-                      <th>Updated</th>
-                      <th>Injury</th>
-                      <th>Injury Status</th>
-                    </tr>
-                    {injuries?.map(
-                      ({
-                        player,
-                        position,
-                        updated,
-                        injury,
-                        injurystatus,
-                        positionno,
-                      }) => (
-                        <>
-                          <tr>
-                            <th>{player}</th>
-                            <td>
-                              {position}/{positionno}
-                            </td>
-                            <td>{updated}</td>
-                            <td>{injury}</td>
-                            <td>{injurystatus}</td>
-                          </tr>
-                        </>
-                      )
-                    )}
-                  </tbody>
-                </table>
-              </div>
-              <div className="hide-on-med-and-up">
-                <table className="small-table">
-                  <tbody>
-                    <tr>
-                      <th>Player</th>
-                      <th>Pos/Imp</th>
-                      <th>Updated</th>
-                      <th>Injury</th>
-                    </tr>
-                    {injuries?.map(
-                      ({
-                        player,
-                        position,
-                        updated,
-                        injury,
-                        injurystatus,
-                        positionno,
-                      }) => (
-                        <>
-                          <tr>
-                            <th>{player}</th>
-                            <td>
-                              {position}/{positionno}
-                            </td>
-                            <td>{updated}</td>
-                            <td>{injury}</td>
-                          </tr>
-                          <tr>
-                            <td colSpan="4">
-                              <span className="head">Status: </span>
-                              {injurystatus}
-                            </td>
-                          </tr>
-                        </>
-                      )
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          ) : (
-            <h6 className="center head">No Injuries</h6>
-          )}
-        </div>
+      <div className="card-content">
+        <h5 className="center">Nothing Found</h5>
       </div>
+      </div>
+      }
     </>
   );
 };
 
-const InjuriesJSX = (props) => {
-  // console.log('injuries jsx props=>', props);
-  const { api_data } = props;
-  const raw = api_data.feed.entry;
-  // console.log('injuries jsx raw=>', raw);
-
-  const [search, set_search] = useState("");
-
-  const structured = structure_injuries_raw_data({ raw, search });
-  // console.log('injuries jsx strucured=>', structured);
-
-  return (
-    <div className="">
-      <div className="center">
-        <input
-          onChange={(e) => {
-            set_search(e.target.value);
-          }}
-          type="text"
-          value={search}
-          placeholder="Search"
-        />
-      </div>
-      {/* <p>{search}</p> */}
-      {structured && Object.keys(structured).length > 0 ? (
-        Object.keys(structured).map((team) => (
-          <>
-            <EachTeamInjuries {...{ team_ob: structured[team] }} />
-            <hr />
-          </>
-        ))
-      ) : (
-        <div className="card">
-          <div className="card-content">
-            <h5 className="center">Nothing Found</h5>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
 function InjuriesPage() {
-  // console.log('injury page')
+  const { configs } = useSelector(
+    ({ teamStats }) => teamStats[category][subcategory]
+  );
+  var injuries_all = useSelector(state=>{try{return state.teamStats[category][subcategory].stats.injuries}catch(err){return {}}});
+  
+  var loaded = useSelector(state=>{try{return state.teamStats[category][subcategory].status.injuries}catch(err){return false}});
+  
+  const [search, set_search ]= useState('');
+  useSelector(()=>{
+  console.log({loaded});
+  })
   return (
     <div>
       <h5 className="center">NBA Injuries</h5>
-      <GetFromAPI api={get_sheet_url({ sheet_id, sheet_no })}>
-        <InjuriesJSX />
-      </GetFromAPI>
+      <input type="text" value={search} onChange={(e)=>{set_search(e.target.value)}}/>
+      <StatsCardWrapper
+        {...{ category, subcategory, post_fetch_api_at_stat_key, configs }}
+      >
+        {loaded == 'loaded' && <>
+            {(()=>{
+              var teams;
+              if(!search || search?.trim().length==0) teams = get_all_teams_names({category, subcategory})
+              else{
+                teams = filter({search, injuries_all})
+              }
+              return <InjuriesJSX {...{teams}} />
+            })()}
+          </>
+        }
+        {
+          loaded == 'loading' && <>
+            <div className="card round-card">
+              <div className="card-content">
+                <h5 className="center"> Loading.... </h5>
+              </div>
+            </div>
+          </>
+        }
+      </StatsCardWrapper>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { get_team_key } from "../../../utils/utils";
 import LargeLogo from "../../LargeLogo";
 import {
   SingleStat,
@@ -11,13 +12,25 @@ const key_mapping_streaks = [
   { key_init: "gsx$streaks", key_final: "streaks", key_head: "Streaks" },
 ];
 
+const category = 'basketball', subcategory='nba';
+
 export const structure_streaks_data = (data_ar) => {
   var raw_streaks = data_ar[0].feed.entry;
   raw_streaks = structure_raw_row_from_key_mapping({
     raw: raw_streaks,
     key_mapping: key_mapping_streaks,
   });
-  // console.log("raw_streaks", raw_streaks);
+  
+  raw_streaks = raw_streaks.map(ea=>{
+    var game = ea.game;
+    var teams = game.trim().split(' vs ');
+    teams = teams.map(team=>get_team_key({team, category, subcategory}) )
+    game = `${teams[0]} vs ${teams[1]}`;
+    return { ...ea, game };
+  });
+  console.log("raw_streaks", raw_streaks);
+
+
   const str_streaks = raw_streaks.reduce((acc,{game,streaks})=>({
     ...acc,
     [game]:[

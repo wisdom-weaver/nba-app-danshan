@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { get_team_key } from "../../../utils/utils";
 import LargeLogo from "../../LargeLogo";
 import {
   SingleStat,
@@ -54,12 +55,18 @@ const key_mapping_trends = [
   },
 ];
 
+const category = 'baskrtball', subcategory ='nba';
+
 export const structure_trends_data = (data_ar) => {
   var raw_trends = data_ar[0].feed.entry;
   raw_trends = structure_raw_row_from_key_mapping({
     raw: raw_trends,
     key_mapping: key_mapping_trends,
   });
+  raw_trends = raw_trends.map((ea) => ({
+    ...ea,
+    team: get_team_key({ team: ea.team, category, subcategory }),
+  }));
   // console.log("raw_trends", raw_trends);
   var str_trends = _.keyBy(raw_trends, "team");
   delete str_trends[""];

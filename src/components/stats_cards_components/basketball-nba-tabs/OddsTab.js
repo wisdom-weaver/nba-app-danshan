@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { get_team_key } from "../../../utils/utils";
 import LargeLogo from "../../LargeLogo";
 import { SingleStat, structure_raw_row_from_key_mapping } from "../stats_cards_components";
 
@@ -50,6 +51,8 @@ const key_mapping_odds = [
   },
 ];
 
+const category = 'basketball', subcategory='nba';
+
 export const structure_odds_data = (data_ar) => {
   var raw_odds = data_ar[0].feed.entry;
   raw_odds = structure_raw_row_from_key_mapping({
@@ -57,6 +60,7 @@ export const structure_odds_data = (data_ar) => {
     key_mapping: key_mapping_odds,
   });
   // console.log("raw_odds", raw_odds);
+  raw_odds = raw_odds.map(ea=>({...ea, team:get_team_key({team: ea.team, category, subcategory})}));
   var str_odds = _.keyBy(raw_odds, "team");
   delete str_odds[""];
   // console.log("str_odds", str_odds);

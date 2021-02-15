@@ -1,4 +1,4 @@
-import teamDataJSON from "../static/teamData.json";
+import base_game_data from '../static/BaseGamesData/base_game_data.json'
 
 const fetch_data = (url) => {
   return new Promise((resolve, reject) => {
@@ -6,18 +6,6 @@ const fetch_data = (url) => {
       .then((resp) => resp.json())
       .then((data) => resolve(data));
   });
-};
-
-export const get_team_data = (team) => {
-  if (team == "76ers" || team == "Seventysixers")
-    return teamDataJSON["Seventysixers"] || {};
-  if (team == "Blazers" || team == "Trailblazers")
-    return teamDataJSON["Trailblazers"] || {};
-  return teamDataJSON[team] || {};
-};
-
-export const get_all_teams = () => {
-  return Object.keys(teamDataJSON);
 };
 
 export const get_sheet_url = ({ sheet_id, sheet_no }) =>
@@ -49,3 +37,37 @@ export const get_colors_combo = ({ colorsA, colorsB }) => {
     return { colorA: colorsA[0], colorB: colorsB[0] };
   }
 };
+
+export const get_team_key = ({team, category, subcategory})=>{
+  // console.log('get_team_key = ', {team, category, subcategory})
+  try{
+    var rows = base_game_data.categories[category].subcategories[subcategory].teamsData
+    for(var row in rows){
+      var check = rows[row].teamAliases.reduce((acc, ea)=>acc||ea.toLowerCase().includes(team.toLowerCase()), false);
+      if(check) return row;
+    }
+    return team;
+  }catch(err){
+    return team;
+  }
+}
+
+export const get_team_data = ({team, category, subcategory}) => {
+  try{
+    // console.log('get_team_data = ', {team, category, subcategory})
+    return base_game_data.categories[category].subcategories[subcategory].teamsData[team] || [];
+  }catch(err){
+    return {}
+  }
+};
+
+export const get_team_data_from_any_name = ({team, category, subcategory})=>{
+  var teamKey = get_team_key({team, category, subcategory})
+  // console.log({ team, teamKey })
+  return get_team_data({ team: teamKey, category, subcategory})
+}
+
+export const get_all_teams_names = ({category, subcategory}) => {
+  try{ return Object.keys(base_game_data.categories[category].subcategories[subcategory].teamsData) }
+  catch(err){ return {} }
+}

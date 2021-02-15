@@ -1,122 +1,142 @@
-import { functionsIn } from 'lodash';
-import React, { useState } from 'react'
-import GetFromAPI from '../components/GetFromAPI'
-import LargeLogo from '../components/LargeLogo';
-import SmallLogo from '../components/SmallLogo';
-import { get_sheet_url, get_team_data } from '../utils/utils'
+// import { functionsIn } from "lodash";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+// import GetFromAPI from "../components/GetFromAPI";
+import LargeLogo from "../components/LargeLogo";
+import SmallLogo from "../components/SmallLogo";
+import StatsCardWrapper from "../components/StatsCardWrapper";
+import { TeamInjuries } from "../components/stats_cards_components/basketball-nba-tabs/InjuriesTab";
+import { get_all_teams_names, get_team_data } from "../utils/utils";
+import StatsTabsCard, { post_fetch_api_at_stat_key } from "./StatsTabsCard";
 
-const sheet_id = "1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk";
-const sheet_no = "8";
+const category = "basketball";
+const subcategory = "nba";
 
-const key_mapping_powerrankings = [
-  {
-    key_head: "Team",
-    key_init: "gsx$team",
-    key_final: "team",
-  },
-  {
-    key_head: "Ranking",
-    key_init: "gsx$ranking",
-    key_final: "ranking",
-  },
-]
+const filter = ({ search, rankings_all }) => {
+  // search = search.trim()
+  if (!search) return;
+  search = search.split(" ");
 
-const structure_powerrankings_raw_data = ({ raw, search }) => {
-  var structured = {}, stru_ar = [];
+  rankings_all = Object.entries(rankings_all);
+  rankings_all = rankings_all.map(([team, teamob]) => {
+    var count = 0;
+    var { team, points } = teamob;
+    search.map((word) => {
+      if (!word) return;
+      word = word.toLowerCase();
+      if (team && team.toLowerCase().includes(word)) count += 100;
+      if (points && points.toLowerCase().includes(word)) count += 5;
+    }, 0);
+    return { team, count };
+  });
+  var sorted = rankings_all
+    .filter((ea) => ea.count != 0)
+    .sort((a, b) => b.count > a.count)
+    .map(({ team }) => team);
+  return sorted;
+};
 
-  for (var row of raw) {
-    row = key_mapping_powerrankings.reduce((acc, { key_init, key_final, key_head }) => ({ ...acc, [key_final]: row[key_init]?.$t }), {})
-    stru_ar.push(row);
-  }
-
-  // console.log(stru_ar);
-
-  for (var row of stru_ar) {
-    var { player, team, ranking } = row;
-    var search_ar = [team, get_team_data(team).teamName, ranking];
-    
-    var check = search && search.trim().toLowerCase().split(' ').reduce((acc, word) => (acc | search_ar.reduce((eac, match = '') => eac | match.toLowerCase().replace(' ', '').includes(word), false)), false)
-    if ((search && check) || (!search || search.length == 0)) {
-        structured[team] = {ranking}
-    }
-  }
-
-  for (var team in structured) {
-    structured[team] = {
-      ...structured[team],
-      ...get_team_data(team)
-    }
-  }
-  // console.log({ structured });
-  return structured
-}
-
-const EachTeamPowerRanking = ({ team_ob }) => {
-  const { teamName, teamImg, ranking } = team_ob;
+const EachPowerRankingRow = ({ team, rankings_all }) => {
+  const { teamImg } = get_team_data({ team, category, subcategory });
   return (
-    <tr>
-      <td><div className="row-flex justify-flex-start"><SmallLogo image={teamImg} /> <span>{teamName}</span></div></td>
-      <td>{ranking}</td>
-    </tr>
-  )
-}
-
-const PowerRankingsJSX = (props) => {
-  // console.log('powerrankings jsx props=>', props);
-  const { api_data } = props;
-  const raw = api_data.feed.entry;
-  // console.log('powerrankings jsx raw=>', raw);
-
-  const [search, set_search] = useState('');
-
-  // const structured = {};
-  const structured = structure_powerrankings_raw_data({ raw, search });
-  // console.log('powerrankings jsx strucured=>', structured);
-
-
-  return (
-    <div className="">
-      <div className="center">
-        <input onChange={(e) => { set_search(e.target.value) }} type="text" value={search} placeholder="Search" />
-      </div>
-      {
-        (structured && Object.keys(structured).length>0)?(
-          <table>
-          <tbody>
-            <tr>
-              <th>Team</th>
-              <th>Rankings</th>
-            </tr>
-            {Object.keys(structured).map(team =>
-              <EachTeamPowerRanking {...{ team_ob: structured[team] }} />
-            )}
-          </tbody>
-        </table>
-        ):(
-          <div className="card">
-            <div className="card-content">
-              <h5 className="center">Nothing Found</h5>
-            </div>
+    <>
+      <tr>
+        <td>
+          <div className="row-flex justify-flex-start">
+            <SmallLogo image={teamImg} />
+            <span>{team}</span>
           </div>
-        )
-      }
-    </div>
-  )
-}
+        </td>
+        <td>{rankings_all[team].points}</td>
+      </tr>
+    </>
+  );
+};
+
+const PowerRankingsJSX = ({ teams, rankings_all }) => {
+  return (
+    <>
+      {teams && teams.length > 0 && (
+        <table>
+          <tr>
+            <th>Teams</th>
+            <th>PowerRankings</th>
+          </tr>
+          {teams?.map((team) => (
+            <EachPowerRankingRow {...{ team, rankings_all }} />
+          ))}
+        </table>
+      )}
+      {(!teams || !(teams?.length > 0)) && (
+        <h5 className="center">Nothing Found</h5>
+      )}
+    </>
+  );
+};
 
 function PowerRankingsPage() {
-  // console.log('injury page')
+  const { configs } = useSelector(
+    ({ teamStats }) => teamStats[category][subcategory]
+  );
+  var rankings_all = useSelector((state) => {
+    try {
+      return state.teamStats[category][subcategory].stats.matchup;
+    } catch (err) {
+      return {};
+    }
+  });
+  const [search, set_search] = useState("");
+
+  var loaded = useSelector((state) => {
+    try {
+      return state.teamStats[category][subcategory].status.matchup;
+    } catch (err) {
+      return false;
+    }
+  });
+
   return (
     <div>
-      <h5 className="center">NBA Power Rankings</h5>
-      <GetFromAPI
-        // api={"https://spreadsheets.google.com/feeds/list/1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk/8/public/values?alt=json"}
-        api={get_sheet_url({ sheet_id, sheet_no })}
+      <h5 className="center">NBA PowerRankings</h5>
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => {
+          set_search(e.target.value);
+        }}
+      />
+      <StatsCardWrapper
+        {...{ category, subcategory, post_fetch_api_at_stat_key, configs }}
       >
-        <PowerRankingsJSX />
-      </GetFromAPI>
+        {loaded == "loaded" && (
+          <>
+            <div className="card round-card">
+              <div className="card-content">
+                {(() => {
+                  var teams;
+                  if (!search || search?.trim().length == 0)
+                    teams = get_all_teams_names({ category, subcategory });
+                  else {
+                    teams = filter({ search, rankings_all });
+                  }
+                  return <PowerRankingsJSX {...{ teams, rankings_all }} />;
+                })()}
+              </div>
+            </div>
+          </>
+        )}
+        {loaded == "loading" && (
+          <>
+            <div className="card round-card">
+              <div className="card-content">
+                <h5 className="center"> Loading.... </h5>
+              </div>
+            </div>
+          </>
+        )}
+      </StatsCardWrapper>
     </div>
-  )
+  );
 }
 
-export default PowerRankingsPage
+export default PowerRankingsPage;

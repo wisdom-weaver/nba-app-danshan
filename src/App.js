@@ -4,12 +4,14 @@ import { Route, Switch } from "react-router";
 import { BrowserRouter, HashRouter } from "react-router-dom";
 import { compose } from "redux";
 import Layout from "./components/Layout";
+import { get_team_key } from "./utils/utils";
 import GamePage from "./views/GamePage";
 import InjuriesPage from "./views/InjuriesPage";
 import PowerRankingsPage from "./views/PowerRankingsPage";
 import TeamPage from "./views/TeamPage";
 
 function App() {
+  console.log(get_team_key({ team:'Hawks', category:'basketball', subcategory:'nba' }));
   return (
     <div className="App">
       <HashRouter>
@@ -27,12 +29,12 @@ function App() {
               <PowerRankingsPage />
             </Layout>
           </Route>
-          {/* <Route exact path="/team/:teamid">
+          <Route exact path="/team/:teamid">
             <TeamPage />
           </Route>
           <Route exact path="/game/:gameid">
             <GamePage />
-          </Route> */}
+          </Route>
         </Switch>
       </HashRouter>
     </div>
@@ -40,7 +42,7 @@ function App() {
 }
 
 const mapStateToProps = (state)=>{
-  // console.log('state=>', state);
+  console.log('state=>', state);
   return {}
 }
 
