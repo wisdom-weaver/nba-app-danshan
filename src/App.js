@@ -6,18 +6,21 @@ import { compose } from "redux";
 import Layout from "./components/Layout";
 import { get_team_key } from "./utils/utils";
 import GamePage from "./views/GamePage";
+import HomePage from "./views/HomePage";
 import InjuriesPage from "./views/InjuriesPage";
 import PowerRankingsPage from "./views/PowerRankingsPage";
 import TeamPage from "./views/TeamPage";
 
 function App() {
-  // console.log(get_team_key({ team:'Hawks', category:'basketball', subcategory:'nba' }));
+  console.log(get_team_key({ team:'', category:'basketball', subcategory:'nba' }));
   return (
     <div className="App">
       <HashRouter>
         <Switch>
           <Route exact path="/">
-            <Layout></Layout>
+            <Layout>
+              <HomePage />
+            </Layout>
           </Route>
           <Route exact path="/injuries">
             <Layout>
@@ -30,7 +33,9 @@ function App() {
             </Layout>
           </Route>
           <Route exact path="/team/:teamid">
-            <TeamPage />
+            <Layout>
+              <TeamPage />
+            </Layout>
           </Route>
           <Route exact path="/game/:gameid">
             <GamePage />
@@ -41,15 +46,13 @@ function App() {
   );
 }
 
-const mapStateToProps = (state)=>{
-  console.log('state=>', state);
-  return {}
-}
+const mapStateToProps = (state) => {
+  console.log("state=>", state);
+  return {};
+};
 
-const mapDispatchToProps = (dispatch)=>{
-  return {}
-}
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps)
-)(App);
+export default compose(connect(mapStateToProps, mapDispatchToProps))(App);

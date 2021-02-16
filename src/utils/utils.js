@@ -39,6 +39,7 @@ export const get_colors_combo = ({ colorsA, colorsB }) => {
 };
 
 export const get_team_key = ({team, category, subcategory})=>{
+  if(!team) return team;
   // console.log('get_team_key = ', {team, category, subcategory})
   try{
     var rows = base_game_data.categories[category].subcategories[subcategory].teamsData
@@ -71,3 +72,4 @@ export const get_all_teams_names = ({category, subcategory}) => {
   try{ return Object.keys(base_game_data.categories[category].subcategories[subcategory].teamsData) }
   catch(err){ return {} }
 }
+

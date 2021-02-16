@@ -13,13 +13,16 @@ import { post_fetch_api_at_stat_key } from "./StatsTabsCard";
 import InjuriesPage from "./InjuriesPage";
 import { TeamInjuries } from "../components/stats_cards_components/basketball-nba-tabs/InjuriesTab";
 import SmallLogo from "../components/SmallLogo";
+import { TeamOdds } from "../components/stats_cards_components/basketball-nba-tabs/OddsTab";
+import { TeamTrends } from "../components/stats_cards_components/basketball-nba-tabs/TrendsTab";
 
 const category = "basketball";
 const subcategory = "nba";
 
 function TeamPage(props) {
   const match = useRouteMatch();
-  const { teamid } = match.params;
+  var { teamid } = match.params;
+  teamid = teamid?.replace('_', ' ');
   const teamData = get_team_data_from_any_name({
     team: teamid,
     category,
@@ -46,7 +49,7 @@ function TeamPage(props) {
   });
 
   return (
-    <div className="container">
+    <div className="">
       <div className="team-top-section">
         <StatsCardWrapper
           {...{ category, subcategory, post_fetch_api_at_stat_key, configs }}
@@ -61,16 +64,16 @@ function TeamPage(props) {
                       className="large-logo-container"
                       style={{
                         backgroundColor: "white",
-                        padding: "10px",
-                        height: "200px",
-                        width: "200px",
+                        padding: "5px",
+                        height: "100px",
+                        width: "100px",
                         overflow: "hidden",
                         borderRadius: "25px",
                       }}
                     >
                       <img src={teamImg} />
                     </div>
-                    <h3 className="head white-text">{teamName}</h3>
+                    <h4 className="head white-text">{teamName}</h4>
                   </div>
                 </div>
               </div>
@@ -96,6 +99,16 @@ function TeamPage(props) {
             {status?.injuries == "loaded" && (
               <div className="col s12">
                 <TeamInjuries {...{ team: teamName, category, subcategory }} />
+              </div>
+            )}
+            {status?.odds == "loaded" && (
+              <div className="col s12">
+                <TeamOdds {...{ team: teamName, category, subcategory }} />
+              </div>
+            )}
+            {status?.trends == "loaded" && (
+              <div className="col s12">
+                <TeamTrends {...{ team: teamName, category, subcategory }} />
               </div>
             )}
           </div>

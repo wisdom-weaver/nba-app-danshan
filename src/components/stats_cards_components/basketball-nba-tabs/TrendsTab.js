@@ -1,5 +1,6 @@
 import _ from "lodash";
-import { get_team_key } from "../../../utils/utils";
+import { useSelector } from "react-redux";
+import { get_team_data_from_any_name, get_team_key } from "../../../utils/utils";
 import LargeLogo from "../../LargeLogo";
 import {
   SingleStat,
@@ -55,7 +56,7 @@ const key_mapping_trends = [
   },
 ];
 
-const category = 'baskrtball', subcategory ='nba';
+const category = 'basketball', subcategory ='nba';
 
 export const structure_trends_data = (data_ar) => {
   var raw_trends = data_ar[0].feed.entry;
@@ -67,7 +68,7 @@ export const structure_trends_data = (data_ar) => {
     ...ea,
     team: get_team_key({ team: ea.team, category, subcategory }),
   }));
-  // console.log("raw_trends", raw_trends);
+  console.log("raw_trends", raw_trends);
   var str_trends = _.keyBy(raw_trends, "team");
   delete str_trends[""];
   // console.log("str_trends", str_trends);
@@ -132,6 +133,66 @@ export const TrendsTab = ({ statA, statB }) => {
   ) : (
     <div className="card-content">
       <p className="flow-text center">No Trends at the moment</p>
+    </div>
+  );
+};
+
+
+export const TeamTrends = ({ team, category, subcategory }) => {
+  const { teamImg, color1, color2 } = get_team_data_from_any_name({
+    team,
+    category,
+    subcategory,
+  });
+  const trends = useSelector((state) => {
+    try {
+      return state.teamStats[category][subcategory].stats["trends"][team];
+    } catch (err) {
+      return [];
+    }
+  });
+  // return <></>
+  return (
+    <div className="card round-card">
+      <div className="card-content">
+        {trends && Object.keys(trends).length != 0 ? (
+          <>
+          <table className="hide-on-small-only">
+          <tbody>
+            <tr>
+              <td>Teams</td>
+              {key_mapping_trends.map(({ key_head, key_final }) => (
+                <td>{key_head}</td>
+              ))}
+            </tr>
+            <tr>
+              <td style={{ borderBottom: `3px solid ${color1}` }}>
+                {trends["teams"]}
+              </td>
+              {key_mapping_trends.map(({ key_head, key_final }) => (
+                <td>{trends[key_final]}</td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+        <table className="hide-on-med-and-up">
+          <tbody>
+            {key_mapping_trends.map(({ key_head, key_final }) => (
+              <SingleStat
+                statLeft={trends[key_final]}
+                // statRight={trendsB[key_final]}
+                show_line={true}
+                statTitle={key_head}
+                {...{ color1, color2 }}
+              />
+            ))}
+          </tbody>
+        </table>
+        </>
+        ) : (
+          <h5 className="center">No Trends yet</h5>
+        )}
+      </div>
     </div>
   );
 };

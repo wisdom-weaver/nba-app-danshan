@@ -14,11 +14,14 @@ function Layout(props) {
     </>
   );
   return (
-    <div className="container">
+    <div className="">
       <div className="logo-continer">
         <img src={bettorsightLogo} alt="" />
       </div>
       <div className="row-flex ">
+        <NavLink to="/">
+          <div className="btn black-btn m5">Home</div>
+        </NavLink>
         <NavLink to="/powerrankings">
           <div className="btn black-btn m5">Power Rankings</div>
         </NavLink>

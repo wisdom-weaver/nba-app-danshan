@@ -1,7 +1,14 @@
 import _ from "lodash";
-import { get_team_key } from "../../../utils/utils";
+import { useSelector } from "react-redux";
+import {
+  get_team_data_from_any_name,
+  get_team_key,
+} from "../../../utils/utils";
 import LargeLogo from "../../LargeLogo";
-import { SingleStat, structure_raw_row_from_key_mapping } from "../stats_cards_components";
+import {
+  SingleStat,
+  structure_raw_row_from_key_mapping,
+} from "../stats_cards_components";
 
 const key_mapping_odds = [
   {
@@ -51,7 +58,8 @@ const key_mapping_odds = [
   },
 ];
 
-const category = 'basketball', subcategory='nba';
+const category = "basketball",
+  subcategory = "nba";
 
 export const structure_odds_data = (data_ar) => {
   var raw_odds = data_ar[0].feed.entry;
@@ -60,7 +68,10 @@ export const structure_odds_data = (data_ar) => {
     key_mapping: key_mapping_odds,
   });
   // console.log("raw_odds", raw_odds);
-  raw_odds = raw_odds.map(ea=>({...ea, team:get_team_key({team: ea.team, category, subcategory})}));
+  raw_odds = raw_odds.map((ea) => ({
+    ...ea,
+    team: get_team_key({ team: ea.team, category, subcategory }),
+  }));
   var str_odds = _.keyBy(raw_odds, "team");
   delete str_odds[""];
   // console.log("str_odds", str_odds);
@@ -111,6 +122,58 @@ export const OddsTab = ({ statA, statB }) => {
       ) : (
         <h5 className="center">No Odds yet</h5>
       )}
+    </div>
+  );
+};
+
+export const TeamOdds = ({ team, category, subcategory }) => {
+  const { teamImg } = get_team_data_from_any_name({
+    team,
+    category,
+    subcategory,
+  });
+  const odds = useSelector((state) => {
+    try {
+      return state.teamStats[category][subcategory].stats["odds"][team];
+    } catch (err) {
+      return [];
+    }
+  });
+  // return <></>
+  return (
+    <div className="card round-card">
+      <div className="card-content">
+        {odds && Object.keys(odds).length != 0 ? (
+          <>
+            <div className="row-flex align-">
+              <div className="col-flex w-200px justify-flex-start">
+                <LargeLogo image={teamImg} />
+                <span className="bold center">{team}</span>
+              </div>
+            </div>
+            <div className="spacing-20px"></div>
+            <h5 className="center">Odds</h5>
+            <div className="spacing-20px"></div>
+            <div className="m-auto max_w-250px">
+              {key_mapping_odds.map(({ key_head, key_final }) => (
+                <>
+                  <SingleStat
+                    statLeft={key_head}
+                    statRight={odds[key_final]}
+                    lval={20}
+                    rval={80}
+                    // statTitle={key_head}
+                    // {...{ colorA, colorB }}
+                  />
+                  <div className="spacing-10px"></div>
+                </>
+              ))}
+            </div>
+          </>
+        ) : (
+          <h5 className="center">No Odds yet</h5>
+        )}
+      </div>
     </div>
   );
 };
