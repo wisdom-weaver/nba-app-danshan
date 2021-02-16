@@ -68,7 +68,7 @@ export const structure_trends_data = (data_ar) => {
     ...ea,
     team: get_team_key({ team: ea.team, category, subcategory }),
   }));
-  console.log("raw_trends", raw_trends);
+  // console.log("raw_trends", raw_trends);
   var str_trends = _.keyBy(raw_trends, "team");
   delete str_trends[""];
   // console.log("str_trends", str_trends);

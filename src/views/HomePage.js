@@ -1,9 +1,41 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import LargeLogo from "../components/LargeLogo";
-import { get_all_teams_names, get_team_data } from "../utils/utils";
+import SmallLogo from "../components/SmallLogo";
+import {
+  get_all_teams_names,
+  get_team_data,
+  get_team_data_from_any_name,
+} from "../utils/utils";
 
 const [category, subcategory] = ["basketball", "nba"];
+
+export const TeamLink = ({ team, category = "basketball", subcategory = "nba", size="small", align='left' }) => {
+  const { teamName, teamImg, color1, color2 } = get_team_data_from_any_name({
+    category,
+    subcategory,
+    team,
+  });
+  return (
+    <NavLink to={`/team/${teamName.replace(" ", "_")}`}>
+      <div className={`
+        row-flex
+        black-text
+        ${align=='left' && 'justify-flex-start'}
+        ${align=='center' && ''}
+      `}>
+        {size == 'small' && <>
+          <SmallLogo image={teamImg} />
+          <span className="bold center">{teamName}</span>
+        </> }
+        {size == 'large' && <>
+          <LargeLogo image={teamImg} />
+          <h5 className="bold center">{teamName}</h5>
+        </> }
+      </div>
+    </NavLink>
+  );
+};
 
 function HomePage() {
   const all_teams_data = get_all_teams_names({
@@ -18,7 +50,7 @@ function HomePage() {
         <div className="row-flex wrap jusitfy-content-space-between">
           {all_teams_data.map((team) => (
             <>
-              <NavLink to={`/team/${team.teamName.replace(' ', '_')}`}>
+              <NavLink to={`/team/${team.teamName.replace(" ", "_")}`}>
                 <div
                   className="card round-card m5 cursor-pointer"
                   style={{ background: team.color1 }}

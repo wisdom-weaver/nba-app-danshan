@@ -12,7 +12,7 @@ import PowerRankingsPage from "./views/PowerRankingsPage";
 import TeamPage from "./views/TeamPage";
 
 function App() {
-  console.log(get_team_key({ team:'', category:'basketball', subcategory:'nba' }));
+  // console.log(get_team_key({ team:'', category:'basketball', subcategory:'nba' }));
   return (
     <div className="App">
       <HashRouter>
@@ -47,7 +47,7 @@ function App() {
 }
 
 const mapStateToProps = (state) => {
-  console.log("state=>", state);
+  // console.log("state=>", state);
   return {};
 };
 

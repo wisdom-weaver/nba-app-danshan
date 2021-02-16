@@ -1,5 +1,9 @@
-import _ from 'lodash'
-import { get_team_key } from '../../../utils/utils';
+import _ from "lodash";
+import { useSelector } from "react-redux";
+import {
+  get_team_data_from_any_name,
+  get_team_key,
+} from "../../../utils/utils";
 import {
   both,
   higher_better,
@@ -8,7 +12,7 @@ import {
   structure_raw_row_from_key_mapping,
   TeamBar,
 } from "../stats_cards_components";
-
+import {TeamLink } from '../../../views/HomePage'
 const key_mapping_matchup = [
   {
     key_head: "Team",
@@ -273,24 +277,38 @@ const key_mapping_matchup_sag = [
   },
 ];
 
-const category = 'basketball', subcategory='nba';
+const category = "basketball",
+  subcategory = "nba";
 
 export const structure_matchup_data = (data_ar) => {
   var raw_matchup = data_ar[0].feed.entry;
   var raw_matchup_sag = data_ar[1].feed.entry;
-  raw_matchup = structure_raw_row_from_key_mapping({raw: raw_matchup, key_mapping: key_mapping_matchup});
-  raw_matchup = raw_matchup.map(ea=>({...ea, team:get_team_key({team: ea.team, category, subcategory})}));
-  raw_matchup_sag = structure_raw_row_from_key_mapping({raw: raw_matchup_sag, key_mapping: key_mapping_matchup_sag});
-  raw_matchup_sag = raw_matchup_sag.map(ea=>({...ea, team:get_team_key({team: ea.team, category, subcategory})}));
+  raw_matchup = structure_raw_row_from_key_mapping({
+    raw: raw_matchup,
+    key_mapping: key_mapping_matchup,
+  });
+  raw_matchup = raw_matchup.map((ea) => ({
+    ...ea,
+    team: get_team_key({ team: ea.team, category, subcategory }),
+  }));
+  raw_matchup_sag = structure_raw_row_from_key_mapping({
+    raw: raw_matchup_sag,
+    key_mapping: key_mapping_matchup_sag,
+  });
+  raw_matchup_sag = raw_matchup_sag.map((ea) => ({
+    ...ea,
+    team: get_team_key({ team: ea.team, category, subcategory }),
+  }));
 
   // console.log("raw_matchup=>", raw_matchup);
-  
-  var str_matchup =  _.keyBy(
-    _.merge(_.keyBy(raw_matchup, 'team'), _.keyBy(raw_matchup_sag, 'team'), ),
-    'team');
-  delete str_matchup[''];
-  // console.log("str_matchup=>", str_matchup);  
-  return { stat_structure: str_matchup, stat_key: 'matchup' };
+
+  var str_matchup = _.keyBy(
+    _.merge(_.keyBy(raw_matchup, "team"), _.keyBy(raw_matchup_sag, "team")),
+    "team"
+  );
+  delete str_matchup[""];
+  // console.log("str_matchup=>", str_matchup);
+  return { stat_structure: str_matchup, stat_key: "matchup" };
 };
 
 export const MatchupTab = ({ statA, statB }) => {
@@ -322,7 +340,10 @@ export const MatchupTab = ({ statA, statB }) => {
             statRight={matchB && matchB[stat_row.key_final]}
             side={
               stat_row.side_eval
-                ? stat_row.side_eval(matchA[stat_row.key_final], matchB[stat_row.key_final])
+                ? stat_row.side_eval(
+                    matchA[stat_row.key_final],
+                    matchB[stat_row.key_final]
+                  )
                 : -1
             }
             show_line={true}
@@ -347,7 +368,10 @@ export const MatchupTab = ({ statA, statB }) => {
             statRight={matchB && matchB[stat_row.key_final]}
             side={
               stat_row.side_eval
-                ? stat_row.side_eval(matchA[stat_row.key_final], matchB[stat_row.key_final])
+                ? stat_row.side_eval(
+                    matchA[stat_row.key_final],
+                    matchB[stat_row.key_final]
+                  )
                 : -1
             }
             show_line={true}
@@ -363,3 +387,106 @@ export const MatchupTab = ({ statA, statB }) => {
     </div>
   );
 };
+
+export const TeamMatchup = ({ team, category, subcategory }) => {
+  const { teamImg, color1, color2 } = get_team_data_from_any_name({
+    team,
+    category,
+    subcategory,
+  });
+  const match = useSelector((state) => {
+    try {
+      return state.teamStats[category][subcategory].stats["matchup"][team];
+    } catch (err) {
+      return [];
+    }
+  });
+
+  const ats_records = key_mapping_matchup.slice(1, 6);
+  const team_matchup = [
+    ...key_mapping_matchup_sag.slice(1),
+    ...key_mapping_matchup.slice(6),
+  ];
+
+  const q_heads = ['Q1', 'Q2', 'Q3', 'Q4']
+  const opp_q_head= ['Opp Q1', 'Opp Q2', 'Opp Q3', 'Opp Q4']
+  const odds_heads =['FG','FG%','FT','FT%','3s','3s%','BLKS','O-RBND','RBND','Fouls','AST','Turnovers', 'Avg Score']
+  const opp_odds_heads = ['Opp FG','Opp FG%','Opp FT','Opp FT%','Opp 3s','Opp 3s%','Opp BLKS','Opp O-RBND','Opp RBND','Opp Fouls','Opp AST','Opp Turnovers', 'Opp Avg Score']
+
+  return (
+    <div className="card round-card">
+      <div className="card-content">{
+        (match && Object.keys(match).length != 0) ? (
+          <>
+          <div className="row-flex justify-space-around">
+            {/* <TeamLink {...{team, size:'large',}}/> */}
+            <h5 className="head">ATS Record</h5>
+          </div>
+          <div className="spacing-20px"></div>
+          <div className="row">
+          {ats_records.map((stat_row) => (
+            <>
+              <div className="col s12 m6">
+                  <StatPair {...{match, stat_row}}/>
+              </div>
+            </>
+          ))}
+          </div>
+          <hr/>
+          <div className="bottom-margin-30px"></div>
+          <div className="row-flex justify-space-around">
+            {/* <TeamLink {...{team, size:'large',}}/> */}
+            <h5 className="head">Team Matchup</h5>
+          </div>
+          <div className="spacing-20px"></div>
+          <div className="row">
+            <div className="col s6">
+              <div className="row">
+                <StatPairCollection heads_ar={q_heads} {...{match}}/>
+              </div>
+            </div>
+            <div className="col s6">
+              <div className="row">
+                <StatPairCollection heads_ar={opp_q_head} {...{match}}/>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-0px">
+            <div className="col s6">
+              <div className="row">
+                <StatPairCollection heads_ar={odds_heads} {...{match}}/>
+              </div>
+            </div>
+            <div className="col s6">
+              <div className="row">
+                <StatPairCollection heads_ar={opp_odds_heads} {...{match}}/>
+              </div>
+            </div>
+          </div>
+          </>
+        ) : (<p className="flow-text center">No Data Fetched at the moment</p>)
+      }</div>
+    </div>
+  );
+};
+
+const get_ar_from_key_heads = (head_ar) =>{
+  const mapping = key_mapping_matchup.concat(key_mapping_matchup_sag);
+  return head_ar.map(head => _.find(mapping, {key_head: head}))
+}
+
+const StatPair = ({stat_row, match})=>{
+  return <>
+  <div style={{paddingLeft:'25px', paddingRight:'25px'}}className="row-flex justify-space-between">
+    <span className="head">{stat_row.key_head}</span>
+    <span>{match[stat_row.key_final]}</span>
+  </div>
+  <div className="spacing-20px"></div>
+  </>
+}
+
+const StatPairCollection = ({heads_ar, match})=>{
+  return <>
+  {get_ar_from_key_heads(heads_ar).map((stat_row, ind) => ( <div className="col s12 l6"> <StatPair {...{match, stat_row}}/> </div>))}
+  </>
+}

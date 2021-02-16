@@ -5,6 +5,7 @@ import {
   get_team_data_from_any_name,
   get_team_key,
 } from "../../../utils/utils";
+import { TeamLink } from "../../../views/HomePage";
 import LargeLogo from "../../LargeLogo";
 import { structure_raw_row_from_key_mapping } from "../stats_cards_components";
 
@@ -55,7 +56,6 @@ const category = "basketball";
 const subcategory = "nba";
 
 export const structure_injuries_data = (data_ar) => {
-  console.log(get_team_key({ team: "Hawks", category, subcategory }));
   var raw_injuries = data_ar[0].feed.entry;
   raw_injuries = structure_raw_row_from_key_mapping({
     raw: raw_injuries,
@@ -91,10 +91,7 @@ export const TeamInjuries = ({ team, category, subcategory }) => {
     <>
       <div className="card round-card">
         <div className="card-content">
-          <div className="row-flex flex-start">
-            <LargeLogo image={teamImg} />
-            <h5 className="bold center">{team}</h5>
-          </div>
+          <TeamLink {...{team, size:'large', align:'center'}}/>
           <div className="spacing-10px"></div>
 
           {injuries && injuries?.length != 0 ? (

@@ -8,6 +8,7 @@ import StatsCardWrapper from "../components/StatsCardWrapper";
 import { TeamInjuries } from "../components/stats_cards_components/basketball-nba-tabs/InjuriesTab";
 import { get_all_teams_names, get_team_data } from "../utils/utils";
 import StatsTabsCard, { post_fetch_api_at_stat_key } from "./StatsTabsCard";
+import {TeamLink} from './HomePage'
 
 const category = "basketball";
 const subcategory = "nba";
@@ -42,10 +43,7 @@ const EachPowerRankingRow = ({ team, rankings_all }) => {
     <>
       <tr>
         <td>
-          <div className="row-flex justify-flex-start">
-            <SmallLogo image={teamImg} />
-            <span>{team}</span>
-          </div>
+          <TeamLink {...{team}}/>
         </td>
         <td>{rankings_all[team].points}</td>
       </tr>
