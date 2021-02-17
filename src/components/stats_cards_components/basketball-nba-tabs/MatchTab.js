@@ -12,7 +12,7 @@ import {
   structure_raw_row_from_key_mapping,
   TeamBar,
 } from "../stats_cards_components";
-import {TeamLink } from '../../../views/HomePage'
+import { TeamLink } from "../../../views/HomePage";
 const key_mapping_matchup = [
   {
     key_head: "Team",
@@ -408,85 +408,138 @@ export const TeamMatchup = ({ team, category, subcategory }) => {
     ...key_mapping_matchup.slice(6),
   ];
 
-  const q_heads = ['Q1', 'Q2', 'Q3', 'Q4']
-  const opp_q_head= ['Opp Q1', 'Opp Q2', 'Opp Q3', 'Opp Q4']
-  const odds_heads =['FG','FG%','FT','FT%','3s','3s%','BLKS','O-RBND','RBND','Fouls','AST','Turnovers', 'Avg Score']
-  const opp_odds_heads = ['Opp FG','Opp FG%','Opp FT','Opp FT%','Opp 3s','Opp 3s%','Opp BLKS','Opp O-RBND','Opp RBND','Opp Fouls','Opp AST','Opp Turnovers', 'Opp Avg Score']
+  const q_heads = ["Q1", "Q2", "Q3", "Q4"];
+  const opp_q_head = ["Opp Q1", "Opp Q2", "Opp Q3", "Opp Q4"];
+  const odds_heads = [
+    "FG",
+    "FG%",
+    "FT",
+    "FT%",
+    "3s",
+    "3s%",
+    "BLKS",
+    "O-RBND",
+    "RBND",
+    "Fouls",
+    "AST",
+    "Turnovers",
+    "Avg Score",
+  ];
+  const opp_odds_heads = [
+    "Opp FG",
+    "Opp FG%",
+    "Opp FT",
+    "Opp FT%",
+    "Opp 3s",
+    "Opp 3s%",
+    "Opp BLKS",
+    "Opp O-RBND",
+    "Opp RBND",
+    "Opp Fouls",
+    "Opp AST",
+    "Opp Turnovers",
+    "Opp Avg Score",
+  ];
 
   return (
     <div className="card round-card">
-      <div className="card-content">{
-        (match && Object.keys(match).length != 0) ? (
+      <div className="card-content">
+        {match && Object.keys(match).length != 0 ? (
           <>
-          <div className="row-flex justify-space-around">
-            {/* <TeamLink {...{team, size:'large',}}/> */}
-            <h5 className="head">ATS Record</h5>
-          </div>
-          <div className="spacing-20px"></div>
-          <div className="row">
-          {ats_records.map((stat_row) => (
-            <>
+            <div className="row-flex justify-space-around">
+              {/* <TeamLink {...{team, size:'large',}}/> */}
+              <h5 className="head">ATS Record</h5>
+            </div>
+            <div className="spacing-20px"></div>
+            <div className="row">
+              {ats_records.map((stat_row) => (
+                <>
+                  <div className="col s12 m6">
+                    <StatPair {...{ match, stat_row }} />
+                  </div>
+                </>
+              ))}
+            </div>
+            <hr />
+            <div className="bottom-margin-30px"></div>
+            <div className="row-flex justify-space-around">
+              {/* <TeamLink {...{team, size:'large',}}/> */}
+              <h5 className="head">Team Matchup</h5>
+            </div>
+            <div className="spacing-20px"></div>
+            <div className="row mb-5px">
+              <div className="col s6">
+                <div className="row mb-0px">
+                  <StatPairCollection heads_ar={q_heads} {...{ match }} />
+                </div>
+              </div>
+              <div className="col s6">
+                <div className="row mb-0px">
+                  <StatPairCollection heads_ar={opp_q_head} {...{ match }} />
+                </div>
+              </div>
+            </div>
+            <div className="row mb-5px ">
               <div className="col s12 m6">
-                  <StatPair {...{match, stat_row}}/>
+                <StatPair {...{ match, stat_row: _.find(key_mapping_matchup_sag, { key_head: 'Power Ranking' }) }} />
               </div>
-            </>
-          ))}
-          </div>
-          <hr/>
-          <div className="bottom-margin-30px"></div>
-          <div className="row-flex justify-space-around">
-            {/* <TeamLink {...{team, size:'large',}}/> */}
-            <h5 className="head">Team Matchup</h5>
-          </div>
-          <div className="spacing-20px"></div>
-          <div className="row">
-            <div className="col s6">
-              <div className="row">
-                <StatPairCollection heads_ar={q_heads} {...{match}}/>
+              <div className="col s12 m6">
+                <StatPair {...{ match, stat_row: _.find(key_mapping_matchup_sag, { key_head: 'Sagarin Rating' }) }} />
               </div>
             </div>
-            <div className="col s6">
-              <div className="row">
-                <StatPairCollection heads_ar={opp_q_head} {...{match}}/>
+            <div className="row mb-0px">
+              <div className="col s6">
+                <div className="row">
+                  <StatPairCollection heads_ar={odds_heads} {...{ match }} />
+                </div>
+              </div>
+              <div className="col s6">
+                <div className="row">
+                  <StatPairCollection
+                    heads_ar={opp_odds_heads}
+                    {...{ match }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="row mb-0px">
-            <div className="col s6">
-              <div className="row">
-                <StatPairCollection heads_ar={odds_heads} {...{match}}/>
-              </div>
-            </div>
-            <div className="col s6">
-              <div className="row">
-                <StatPairCollection heads_ar={opp_odds_heads} {...{match}}/>
-              </div>
-            </div>
-          </div>
           </>
-        ) : (<p className="flow-text center">No Data Fetched at the moment</p>)
-      }</div>
+        ) : (
+          <p className="flow-text center">No Data Fetched at the moment</p>
+        )}
+      </div>
     </div>
   );
 };
 
-const get_ar_from_key_heads = (head_ar) =>{
+const get_ar_from_key_heads = (head_ar) => {
   const mapping = key_mapping_matchup.concat(key_mapping_matchup_sag);
-  return head_ar.map(head => _.find(mapping, {key_head: head}))
-}
+  return head_ar.map((head) => _.find(mapping, { key_head: head }));
+};
 
-const StatPair = ({stat_row, match})=>{
-  return <>
-  <div style={{paddingLeft:'25px', paddingRight:'25px'}}className="row-flex justify-space-between">
-    <span className="head">{stat_row.key_head}</span>
-    <span>{match[stat_row.key_final]}</span>
-  </div>
-  <div className="spacing-20px"></div>
-  </>
-}
+const StatPair = ({ stat_row, match }) => {
+  return (
+    <>
+      <div
+        style={{ paddingLeft: "25px", paddingRight: "25px" }}
+        className="row-flex justify-space-between"
+      >
+        <span className="head">{stat_row?.key_head}</span>
+        <span>{match[stat_row?.key_final]}</span>
+      </div>
+      <div className="spacing-20px"></div>
+    </>
+  );
+};
 
-const StatPairCollection = ({heads_ar, match})=>{
-  return <>
-  {get_ar_from_key_heads(heads_ar).map((stat_row, ind) => ( <div className="col s12 l6"> <StatPair {...{match, stat_row}}/> </div>))}
-  </>
-}
+const StatPairCollection = ({ heads_ar, match }) => {
+  return (
+    <>
+      {get_ar_from_key_heads(heads_ar).map((stat_row, ind) => (
+        <div className="col s12 l6">
+          {" "}
+          <StatPair {...{ match, stat_row }} />{" "}
+        </div>
+      ))}
+    </>
+  );
+};
