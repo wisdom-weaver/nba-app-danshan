@@ -16,6 +16,7 @@ import SmallLogo from "../components/SmallLogo";
 import { TeamOdds } from "../components/stats_cards_components/basketball-nba-tabs/OddsTab";
 import { TeamTrends } from "../components/stats_cards_components/basketball-nba-tabs/TrendsTab";
 import { TeamMatchup } from "../components/stats_cards_components/basketball-nba-tabs/MatchTab";
+import { TeamPowerRankings } from "../components/stats_cards_components/basketball-nba-tabs/PowerRankingsTab";
 
 const category = "basketball";
 const subcategory = "nba";
@@ -79,22 +80,9 @@ function TeamPage(props) {
                 </div>
               </div>
             </div>
-            {status?.matchup == "loaded" && (
+            {status?.powerrankings == "loaded" && (
               <div className="col s12">
-                <div className="card round-card">
-                  <div className="card-content">
-                    <div className="row-flex justify-space-around">
-                      <div className="row-flex">
-                        <SmallLogo image={teamImg} />
-                        <h5 className="head">{teamName}</h5>
-                      </div>
-                      <div className="row-flex">
-                        <h5 className="head">PowerRanking: </h5>
-                        <h5 className="head">{team_matchup.points}</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <TeamPowerRankings {...{ team: teamName, category, subcategory }} />
               </div>
             )}
             {status?.injuries == "loaded" && (

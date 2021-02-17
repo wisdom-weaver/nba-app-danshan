@@ -3,6 +3,7 @@ import { structure_injuries_data } from "../../components/stats_cards_components
 import { structure_odds_data } from "../../components/stats_cards_components/basketball-nba-tabs/OddsTab";
 import { structure_trends_data } from "../../components/stats_cards_components/basketball-nba-tabs/TrendsTab";
 import { structure_streaks_data } from "../../components/stats_cards_components/basketball-nba-tabs/StreaksTab";
+import { structure_powerrankings_data } from "../../components/stats_cards_components/basketball-nba-tabs/PowerRankingsTab";
 
 const initialState = {
   basketball: {
@@ -13,6 +14,7 @@ const initialState = {
         odds: "not_loaded",
         trends: "not_loaded",
         streaks: "not_loaded",
+        powerrankings: "not_loaded"
       },
       configs: {
         matchup: {
@@ -48,6 +50,12 @@ const initialState = {
           ],
           structure_data: structure_streaks_data,
         },
+        powerrankings:{
+          apis: [
+            "https://spreadsheets.google.com/feeds/list/1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk/8/public/values?alt=json",
+          ],
+          structure_data: structure_powerrankings_data,
+        }
       },
     },
   },

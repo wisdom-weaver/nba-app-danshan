@@ -21,12 +21,12 @@ const filter = ({ search, rankings_all }) => {
   rankings_all = Object.entries(rankings_all);
   rankings_all = rankings_all.map(([team, teamob]) => {
     var count = 0;
-    var { team, points } = teamob;
+    var { team, ranking } = teamob;
     search.map((word) => {
       if (!word) return;
       word = word.toLowerCase();
       if (team && team.toLowerCase().includes(word)) count += 100;
-      if (points && points.toLowerCase().includes(word)) count += 5;
+      if (ranking && ranking.toLowerCase().includes(word)) count += 5;
     }, 0);
     return { team, count };
   });
@@ -45,7 +45,7 @@ const EachPowerRankingRow = ({ team, rankings_all }) => {
         <td>
           <TeamLink {...{team}}/>
         </td>
-        <td>{rankings_all[team].points}</td>
+        <td className="head">{rankings_all[team].ranking}</td>
       </tr>
     </>
   );
@@ -78,7 +78,7 @@ function PowerRankingsPage() {
   );
   var rankings_all = useSelector((state) => {
     try {
-      return state.teamStats[category][subcategory].stats.matchup;
+      return state.teamStats[category][subcategory].stats['powerrankings'];
     } catch (err) {
       return {};
     }
@@ -87,7 +87,7 @@ function PowerRankingsPage() {
 
   var loaded = useSelector((state) => {
     try {
-      return state.teamStats[category][subcategory].status.matchup;
+      return state.teamStats[category][subcategory].status['powerrankings'];
     } catch (err) {
       return false;
     }
