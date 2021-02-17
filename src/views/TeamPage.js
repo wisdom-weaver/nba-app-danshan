@@ -90,16 +90,16 @@ function TeamPage(props) {
                 <TeamInjuries {...{ team: teamName, category, subcategory }} />
               </div>
             )}
-            {status?.odds == "loaded" && (
+            {/* {status?.odds == "loaded" && (
               <div className="col s12">
                 <TeamOdds {...{ team: teamName, category, subcategory }} />
               </div>
-            )}
-            {status?.trends == "loaded" && (
+            )} */}
+            {/* {status?.trends == "loaded" && (
               <div className="col s12">
                 <TeamTrends {...{ team: teamName, category, subcategory }} />
               </div>
-            )}
+            )} */}
             {status?.matchup == "loaded" && (
               <div className="col s12">
                 <TeamMatchup {...{ team: teamName, category, subcategory }} />

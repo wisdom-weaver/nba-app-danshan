@@ -21,6 +21,11 @@ const key_mapping_powerrankings = [
     key_init: "gsx$ranking",
     key_final: "ranking",
   },
+  {
+    key_head: "Sagarin Rating",
+    key_init: "gsx$rating",
+    key_final: "rating",
+  },
 ];
 
 const category = "basketball";
@@ -50,9 +55,11 @@ export const TeamPowerRankings = ({ team, category, subcategory }) => {
     subcategory,
   });
   // const injuries = []
-  const {ranking} = useSelector((state) => {
+  const { ranking, rating } = useSelector((state) => {
     try {
-      return state.teamStats[category][subcategory].stats['powerrankings'][team];
+      return state.teamStats[category][subcategory].stats["powerrankings"][
+        team
+      ];
     } catch (err) {
       return [];
     }
@@ -62,16 +69,14 @@ export const TeamPowerRankings = ({ team, category, subcategory }) => {
     <>
       <div className="card round-card">
         <div className="card-content">
-          <div className="card-content">
-            <div className="row-flex justify-space-around">
-              <div className="row-flex">
-                <SmallLogo image={teamImg} />
-                <h5 className="head">{teamName}</h5>
-              </div>
-              <div className="row-flex">
-                <h5 className="head">PowerRanking: </h5>
-                <h5 className="head">{ranking}</h5>
-              </div>
+          <div className="row-flex justify-space-around">
+            <div className="row-flex">
+              <h6 className="head">PowerRanking: </h6>
+              <h6 className="head">{ranking}</h6>
+            </div>
+            <div className="row-flex">
+              <h6 className="head">Sagarin Rating : </h6>
+              <h6 className="head">{rating}</h6>
             </div>
           </div>
         </div>
