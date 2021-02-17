@@ -37,9 +37,9 @@ export const structure_powerrankings_data = (data_ar) => {
     team: get_team_key({ team: ea.team, category, subcategory }),
   }));
   var str_powerrankings = _.keyBy(raw_powerrankings, "team");
-  console.log("raw_powerrankings", raw_powerrankings);
+  // console.log("raw_powerrankings", raw_powerrankings);
   delete str_powerrankings[""];
-  console.log("str_powerrankings", str_powerrankings);
+  // console.log("str_powerrankings", str_powerrankings);
   return { stat_structure: str_powerrankings, stat_key: "powerrankings" };
 };
 

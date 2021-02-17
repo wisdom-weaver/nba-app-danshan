@@ -9,6 +9,7 @@ import { TeamInjuries } from "../components/stats_cards_components/basketball-nb
 import { get_all_teams_names, get_team_data } from "../utils/utils";
 import StatsTabsCard, { post_fetch_api_at_stat_key } from "./StatsTabsCard";
 import {TeamLink} from './HomePage'
+import _ from "lodash";
 
 const category = "basketball";
 const subcategory = "nba";
@@ -83,6 +84,7 @@ function PowerRankingsPage() {
       return {};
     }
   });
+
   const [search, set_search] = useState("");
 
   var loaded = useSelector((state) => {
@@ -113,7 +115,7 @@ function PowerRankingsPage() {
                 {(() => {
                   var teams;
                   if (!search || search?.trim().length == 0)
-                    teams = get_all_teams_names({ category, subcategory });
+                    teams = _.sortBy(rankings_all, function(ob){return parseFloat(ob.ranking)}).map(ea=>ea.team)
                   else {
                     teams = filter({ search, rankings_all });
                   }
