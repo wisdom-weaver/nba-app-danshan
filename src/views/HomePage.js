@@ -10,7 +10,13 @@ import {
 
 const [category, subcategory] = ["basketball", "nba"];
 
-export const TeamLink = ({ team, category = "basketball", subcategory = "nba", size="small", align='left' }) => {
+export const TeamLink = ({
+  team,
+  category = "basketball",
+  subcategory = "nba",
+  size = "small",
+  align = "left",
+}) => {
   const { teamName, teamImg, color1, color2 } = get_team_data_from_any_name({
     category,
     subcategory,
@@ -18,20 +24,26 @@ export const TeamLink = ({ team, category = "basketball", subcategory = "nba", s
   });
   return (
     <NavLink to={`/team/${teamName.replace(" ", "_")}`}>
-      <div className={`
+      <div
+        className={`
         row-flex
         black-text
-        ${align=='left' && 'justify-flex-start'}
-        ${align=='center' && ''}
-      `}>
-        {size == 'small' && <>
-          <SmallLogo image={teamImg} />
-          <span className="bold center">{teamName}</span>
-        </> }
-        {size == 'large' && <>
-          <LargeLogo image={teamImg} />
-          <h5 className="bold center">{teamName}</h5>
-        </> }
+        ${align == "left" && "justify-flex-start"}
+        ${align == "center" && ""}
+      `}
+      >
+        {size == "small" && (
+          <>
+            <SmallLogo image={teamImg} />
+            <span className="bold center">{teamName}</span>
+          </>
+        )}
+        {size == "large" && (
+          <>
+            <LargeLogo image={teamImg} />
+            <h5 className="bold center">{teamName}</h5>
+          </>
+        )}
       </div>
     </NavLink>
   );
@@ -42,20 +54,20 @@ function HomePage() {
     category,
     subcategory,
   }).map((team) => get_team_data({ team, category, subcategory }));
-  console.log(all_teams_data);
+  // console.log(all_teams_data);
   return (
     <div>
       <h1 className="center">NBA Teams</h1>
       <div className="">
-        <div className="row-flex wrap jusitfy-content-space-between">
+        <div className="row-flex wrap jusitfy-content-space-between mb-0px">
           {all_teams_data.map((team) => (
             <>
               <NavLink to={`/team/${team.teamName.replace(" ", "_")}`}>
                 <div
-                  className="card round-card m5 cursor-pointer"
+                  className="card round-card m5 cursor-pointer mb-0px"
                   style={{ background: team.color1 }}
                 >
-                  <div className="card-content">
+                  <div className="card-content mb-0px">
                     <div className="col-flex">
                       <div
                         className="large-logo-container"
@@ -70,7 +82,9 @@ function HomePage() {
                       >
                         <img src={team.teamImg} />
                       </div>
-                      <h6 className="head white-text">{team.teamName}</h6>
+                      <h6 style={{transform:'translateY(8px)'}} className="head white-text m3 mb-0px">
+                        {(team.teamName || "")?.split(" ").reverse()[0]}
+                      </h6>
                     </div>
                   </div>
                 </div>
