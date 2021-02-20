@@ -73,7 +73,7 @@ export const structure_injuries_data = (data_ar) => {
 };
 
 export const TeamInjuries = ({ team, category, subcategory }) => {
-  const { teamImg } = get_team_data_from_any_name({
+  const { teamImg, color1} = get_team_data_from_any_name({
     team,
     category,
     subcategory,
@@ -89,7 +89,9 @@ export const TeamInjuries = ({ team, category, subcategory }) => {
   // console.log(team, injuries);
   return (
     <>
-      <div className="card round-card">
+      <div className="card round-card"
+        style={{ boxShadow: `0 0px 5px 0 ${color1}`}}
+      >
         <div className="card-content">
           <TeamLink {...{team, size:'large', align:'center'}}/>
           <div className="spacing-10px"></div>

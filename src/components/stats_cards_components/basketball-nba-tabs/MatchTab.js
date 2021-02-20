@@ -447,7 +447,8 @@ export const TeamMatchup = ({ team, category, subcategory }) => {
   ];
 
   return (
-    <div className="card round-card">
+    <div className="card round-card"
+    style={{ boxShadow: `0 0px 5px 0 ${color1}`}}>
       <div className="card-content">
         {match && Object.keys(match).length != 0 ? (
           <>
