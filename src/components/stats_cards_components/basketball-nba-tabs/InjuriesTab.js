@@ -103,8 +103,8 @@ export const TeamInjuries = ({ team, category, subcategory }) => {
                   <tbody>
                     <tr>
                       <th>Player</th>
-                      <th>Position</th>
-                      <th>Pos/IMP</th>
+                      <th>Pos/Imp</th>
+                      <th>Updated</th>
                       <th>Injury</th>
                       <th>Injury Status</th>
                     </tr>
@@ -139,8 +139,8 @@ export const TeamInjuries = ({ team, category, subcategory }) => {
                   <tbody>
                     <tr>
                       <th>Player</th>
-                      <th>Position</th>
-                      <th>Pos/IMP</th>
+                      <th>Pos/Imp</th>
+                      <th>Updated</th>
                       <th>Injury</th>
                     </tr>
                     {injuries &&
@@ -253,8 +253,8 @@ export const InjuriesTab = ({ statA, statB }) => {
                     <tbody>
                       <tr>
                         <th>Player</th>
-                        <th>Position</th>
-                        <th>Pos/IMP</th>
+                        <th>Pos/Imp</th>
+                        <th>Updated</th>
                         <th>Injury</th>
                       </tr>
                       {injuries &&
