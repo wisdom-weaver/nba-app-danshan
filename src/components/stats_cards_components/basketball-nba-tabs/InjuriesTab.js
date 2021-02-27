@@ -217,7 +217,7 @@ export const InjuriesTab = ({ statA, statB }) => {
                     <tbody>
                       <tr>
                         <th>Player</th>
-                        <th>Pos/IMP</th>
+                        <th>Pos/Imp</th>
                         <th>Updated</th>
                         <th>Injury</th>
                         <th>Injury Status</th>
