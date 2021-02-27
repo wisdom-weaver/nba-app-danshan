@@ -56,11 +56,11 @@ export const get_colors_combo = ({ colorsA, colorsB }) => {
       calc_color_contrast(colorsA[1], colorsB[0]),
       calc_color_contrast(colorsA[1], colorsB[1]),
     ];
-    console.log('diffs');
-    console.log(diffs.map((ea, ind)=>{
-      const [a, b] = [parseInt(ind/2), parseInt(ind%2)];
-      return `${ind}= ${a} ${b} (${parseInt(colorsA[a],16)}  ${parseInt(colorsB[b],16)})=> ${ea}`
-    }).join('\n'));
+    // console.log('diffs');
+    // console.log(diffs.map((ea, ind)=>{
+    //   const [a, b] = [parseInt(ind/2), parseInt(ind%2)];
+    //   return `${ind}= ${a} ${b} (${parseInt(colorsA[a],16)}  ${parseInt(colorsB[b],16)})=> ${ea}`
+    // }).join('\n'));
     var indicies = diffs.findIndex((diff) => diff == Math.max(...diffs));
     // console.log({indicies})
     indicies = [ parseInt(indicies/2), parseInt(indicies%2) ];

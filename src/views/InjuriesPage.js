@@ -67,7 +67,7 @@ function InjuriesPage() {
   
   const [search, set_search ]= useState('');
   useSelector(()=>{
-  console.log({loaded});
+  // console.log({loaded});
   })
   return (
     <div>

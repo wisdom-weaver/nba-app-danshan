@@ -292,8 +292,8 @@ export const structure_matchup_data = (data_ar) => {
     key_mapping: key_mapping_matchup_sag,
   });
   
-  console.log("raw_matchup=>", raw_matchup);
-  console.log("raw_matchup_sag=>", raw_matchup_sag);
+  // console.log("raw_matchup=>", raw_matchup);
+  // console.log("raw_matchup_sag=>", raw_matchup_sag);
 
   raw_matchup = raw_matchup.map((ea) => ({
     ...ea,
@@ -304,15 +304,15 @@ export const structure_matchup_data = (data_ar) => {
     team: get_team_key({ team: ea.team, category, subcategory }),
   }));
 
-  console.log("raw_matchup=>", raw_matchup);
-  console.log("raw_matchup_sag=>", raw_matchup_sag);
+  // console.log("raw_matchup=>", raw_matchup);
+  // console.log("raw_matchup_sag=>", raw_matchup_sag);
 
   var str_matchup = _.keyBy(
     _.merge(_.keyBy(raw_matchup, "team"), _.keyBy(raw_matchup_sag, "team")),
     "team"
   );
   delete str_matchup[""];
-  console.log("str_matchup=>", str_matchup);
+  // console.log("str_matchup=>", str_matchup);
   return { stat_structure: str_matchup, stat_key: "matchup" };
 };
 
