@@ -1,21 +1,21 @@
 {
   "files": {
     "main.css": "/nba/static/css/main.2500415e.chunk.css",
-    "main.js": "/nba/static/js/main.c6f60b79.chunk.js",
-    "main.js.map": "/nba/static/js/main.c6f60b79.chunk.js.map",
+    "main.js": "/nba/static/js/main.9796b15d.chunk.js",
+    "main.js.map": "/nba/static/js/main.9796b15d.chunk.js.map",
     "runtime-main.js": "/nba/static/js/runtime-main.21f3a7ee.js",
     "runtime-main.js.map": "/nba/static/js/runtime-main.21f3a7ee.js.map",
-    "static/js/2.9490d662.chunk.js": "/nba/static/js/2.9490d662.chunk.js",
-    "static/js/2.9490d662.chunk.js.map": "/nba/static/js/2.9490d662.chunk.js.map",
+    "static/js/2.81f2ba57.chunk.js": "/nba/static/js/2.81f2ba57.chunk.js",
+    "static/js/2.81f2ba57.chunk.js.map": "/nba/static/js/2.81f2ba57.chunk.js.map",
     "index.html": "/nba/index.html",
     "static/css/main.2500415e.chunk.css.map": "/nba/static/css/main.2500415e.chunk.css.map",
-    "static/js/2.9490d662.chunk.js.LICENSE.txt": "/nba/static/js/2.9490d662.chunk.js.LICENSE.txt",
+    "static/js/2.81f2ba57.chunk.js.LICENSE.txt": "/nba/static/js/2.81f2ba57.chunk.js.LICENSE.txt",
     "static/media/bettorsight-logo.d52d7cc2.svg": "/nba/static/media/bettorsight-logo.d52d7cc2.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.21f3a7ee.js",
-    "static/js/2.9490d662.chunk.js",
+    "static/js/2.81f2ba57.chunk.js",
     "static/css/main.2500415e.chunk.css",
-    "static/js/main.c6f60b79.chunk.js"
+    "static/js/main.9796b15d.chunk.js"
   ]
 }

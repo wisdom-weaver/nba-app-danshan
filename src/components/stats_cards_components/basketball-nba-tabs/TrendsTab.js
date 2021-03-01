@@ -93,9 +93,9 @@ export const TrendsTab = ({ statA, statB }) => {
       <table className="hide-on-small-only">
         <tbody>
           <tr>
-            <td>Teams</td>
+            <th>Teams</th>
             {key_mapping_trends.map(({ key_head, key_final }) => (
-              <td>{key_head}</td>
+              <th>{key_head}</th>
             ))}
           </tr>
           <tr>
@@ -138,6 +138,7 @@ export const TrendsTab = ({ statA, statB }) => {
 };
 
 
+
 export const TeamTrends = ({ team, category, subcategory }) => {
   const { teamImg, color1, color2 } = get_team_data_from_any_name({
     team,
@@ -151,25 +152,28 @@ export const TeamTrends = ({ team, category, subcategory }) => {
       return [];
     }
   });
+  const show_trends = key_mapping_trends.slice(2);
   // return <></>
   return (
-    <div className="card round-card">
+    <div className="card round-card"
+    style={{ boxShadow: `0 0px 5px 0 ${color1}`}}
+    >
       <div className="card-content">
         {trends && Object.keys(trends).length != 0 ? (
           <>
           <table className="hide-on-small-only">
           <tbody>
             <tr>
-              <td>Teams</td>
-              {key_mapping_trends.map(({ key_head, key_final }) => (
-                <td>{key_head}</td>
+              <th>Team</th>
+              {show_trends.map(({ key_head, key_final }) => (
+                <th>{key_head}</th>
               ))}
             </tr>
             <tr>
               <td style={{ borderBottom: `3px solid ${color1}` }}>
-                {trends["teams"]}
+                {trends["team"]}
               </td>
-              {key_mapping_trends.map(({ key_head, key_final }) => (
+              {show_trends.map(({ key_head, key_final }) => (
                 <td>{trends[key_final]}</td>
               ))}
             </tr>
@@ -177,7 +181,7 @@ export const TeamTrends = ({ team, category, subcategory }) => {
         </table>
         <table className="hide-on-med-and-up">
           <tbody>
-            {key_mapping_trends.map(({ key_head, key_final }) => (
+            {show_trends.map(({ key_head, key_final }) => (
               <SingleStat
                 statLeft={trends[key_final]}
                 // statRight={trendsB[key_final]}

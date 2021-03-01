@@ -15,7 +15,7 @@ import { TeamInjuries } from "../components/stats_cards_components/basketball-nb
 import SmallLogo from "../components/SmallLogo";
 import { TeamOdds } from "../components/stats_cards_components/basketball-nba-tabs/OddsTab";
 import { TeamTrends } from "../components/stats_cards_components/basketball-nba-tabs/TrendsTab";
-import { TeamMatchup } from "../components/stats_cards_components/basketball-nba-tabs/MatchTab";
+import { TeamMatchup, TeamMatchupMD } from "../components/stats_cards_components/basketball-nba-tabs/MatchTab";
 import { TeamPowerRankings } from "../components/stats_cards_components/basketball-nba-tabs/PowerRankingsTab";
 import { ButtonLinks } from "../components/Layout";
 
@@ -91,12 +91,22 @@ function TeamPage(props) {
             )}
             {status?.injuries == "loaded" && (
               <div className="col s12">
-                <TeamInjuries {...{ team: teamName, category, subcategory }} />
+                <TeamInjuries {...{ team: teamName, category, subcategory, showTeam:false }} />
               </div>
             )}
             {status?.matchup == "loaded" && (
               <div className="col s12">
                 <TeamMatchup {...{ team: teamName, category, subcategory }} />
+              </div>
+            )}
+            {status?.matchup == "loaded" && (
+              <div className="col s12">
+                <TeamMatchupMD {...{ team: teamName, category, subcategory }} />
+              </div>
+            )}
+            {status?.trends == "loaded" && (
+              <div className="col s12">
+                <TeamTrends {...{ team: teamName, category, subcategory }} />
               </div>
             )}
           </div>

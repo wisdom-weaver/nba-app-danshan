@@ -1,6 +1,8 @@
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import {
+  get_all_teams_names,
+  get_n_with_sign,
   get_team_data_from_any_name,
   get_team_key,
 } from "../../../utils/utils";
@@ -277,43 +279,110 @@ const key_mapping_matchup_sag = [
   },
 ];
 
+const key_mapping_md = [
+  {
+    key_init: "gsx$_chk2m",
+    key_head: "Team" ,
+    key_final: "team_md" ,
+  },
+  {
+    key_init: "gsx$_ciyn3",
+    key_head: "OPP" ,
+    key_final: "opp" ,
+  },
+  {
+    key_init: "gsx$_ckd7g",
+    key_head: "Site" ,
+    key_final: "site" ,
+  },
+  {
+    key_init: "gsx$_clrrx",
+    key_head: "Final" ,
+    key_final: "final" ,
+  },
+  {
+    key_init: "gsx$_cyevm",
+    key_head: "Line",
+    key_final: "line",
+  },
+  {
+    key_init: "gsx$_cztg3",
+    key_head: "Total" ,
+    key_final: "total" ,
+  },
+  {
+    key_init: "gsx$prdata",
+    key_head: "Date" ,
+    key_final: "date" ,
+  }  
+]
+
 const category = "basketball",
   subcategory = "nba";
 
 export const structure_matchup_data = (data_ar) => {
-  var raw_matchup = data_ar[0].feed.entry;
-  var raw_matchup_sag = data_ar[1].feed.entry;
-  raw_matchup = structure_raw_row_from_key_mapping({
-    raw: raw_matchup,
-    key_mapping: key_mapping_matchup,
-  });
-  raw_matchup_sag = structure_raw_row_from_key_mapping({
-    raw: raw_matchup_sag,
-    key_mapping: key_mapping_matchup_sag,
-  });
-  
-  // console.log("raw_matchup=>", raw_matchup);
-  // console.log("raw_matchup_sag=>", raw_matchup_sag);
+  try {
+    var raw_matchup = data_ar[0].feed.entry;
+    var raw_matchup_md = data_ar[0].feed.entry;
+    // console.log("raw_matchup", raw_matchup);
+    var raw_matchup_sag = data_ar[1].feed.entry;
+    // console.log("raw_matchup_sag", raw_matchup_sag);
 
-  raw_matchup = raw_matchup.map((ea) => ({
-    ...ea,
-    team: get_team_key({ team: ea.team, category, subcategory }),
-  }));
-  raw_matchup_sag = raw_matchup_sag.map((ea) => ({
-    ...ea,
-    team: get_team_key({ team: ea.team, category, subcategory }),
-  }));
+    raw_matchup = structure_raw_row_from_key_mapping({
+      raw: raw_matchup,
+      key_mapping: key_mapping_matchup,
+    });
+    raw_matchup = raw_matchup.map((ea) => ({
+      ...ea,
+      team: get_team_key({ team: ea.team, category, subcategory }),
+    }));
+    raw_matchup_sag = structure_raw_row_from_key_mapping({
+      raw: raw_matchup_sag,
+      key_mapping: key_mapping_matchup_sag,
+    });
+    raw_matchup_sag = raw_matchup_sag.map((ea) => ({
+      ...ea,
+      team: get_team_key({ team: ea.team, category, subcategory }),
+      rating : get_n_with_sign(ea.rating),
+      ranking : get_n_with_sign(ea.ranking),
+    }));
 
-  // console.log("raw_matchup=>", raw_matchup);
-  // console.log("raw_matchup_sag=>", raw_matchup_sag);
+    // console.log("raw_matchup=>", raw_matchup);
 
-  var str_matchup = _.keyBy(
-    _.merge(_.keyBy(raw_matchup, "team"), _.keyBy(raw_matchup_sag, "team")),
-    "team"
-  );
-  delete str_matchup[""];
-  // console.log("str_matchup=>", str_matchup);
-  return { stat_structure: str_matchup, stat_key: "matchup" };
+    // console.log('raw_matchup_md', raw_matchup_md);
+    raw_matchup_md = structure_raw_row_from_key_mapping({
+      raw: raw_matchup_md,
+      key_mapping: key_mapping_md,
+    });
+    raw_matchup_md = raw_matchup_md.map((ea) => ({
+      ...ea,
+      team: get_team_key({ team: ea.team_md, category, subcategory }),
+    }));
+    raw_matchup_md = _.groupBy(raw_matchup_md, "team");
+    raw_matchup_md = Object.entries(raw_matchup_md);
+    raw_matchup_md = raw_matchup_md.map(([key, ob])=>([key, {md:ob}]));
+    raw_matchup_md = Object.fromEntries(raw_matchup_md);
+
+    // console.log('raw_matchup_md', raw_matchup_md);
+    
+    var str_matchup = _.keyBy(
+      _.merge(_.keyBy(raw_matchup, "team"), _.keyBy(raw_matchup_sag, "team")),
+      "team"
+    );
+
+    var final_str_matchup = get_all_teams_names({ category, subcategory });
+    final_str_matchup = final_str_matchup.map(team=>([team, { ...str_matchup[team], ...raw_matchup_md[team] } ]))
+    final_str_matchup = Object.fromEntries(final_str_matchup);
+    
+    delete final_str_matchup[""];
+    delete final_str_matchup["Team"];
+
+    // console.log("str_matchup=>", str_matchup);
+    // console.log('final_str_matchup', final_str_matchup)
+    return { stat_structure: final_str_matchup, stat_key: "matchup" };
+  } catch (err) {
+    return { stat_structure: {}, stat_key: "matchup" };
+  }
 };
 
 export const MatchupTab = ({ statA, statB }) => {
@@ -485,14 +554,14 @@ export const TeamMatchup = ({ team, category, subcategory }) => {
                 </div>
               </div>
             </div>
-            <div className="row mb-5px ">
+            {/* <div className="row mb-5px ">
               <div className="col s12 m6">
                 <StatPair {...{ match, stat_row: _.find(key_mapping_matchup_sag, { key_head: 'Power Ranking' }) }} />
               </div>
               <div className="col s12 m6">
                 <StatPair {...{ match, stat_row: _.find(key_mapping_matchup_sag, { key_head: 'Sagarin Rating' }) }} />
               </div>
-            </div>
+            </div> */}
             <div className="row mb-0px">
               <div className="col s6">
                 <div className="row">
@@ -517,8 +586,52 @@ export const TeamMatchup = ({ team, category, subcategory }) => {
   );
 };
 
+export const TeamMatchupMD = ({ team, category, subcategory }) => {
+  const { teamImg, color1, color2 } = get_team_data_from_any_name({
+    team,
+    category,
+    subcategory,
+  });
+  const md = useSelector((state) => {
+    try {
+      return state.teamStats[category][subcategory].stats["matchup"][team].md;
+    } catch (err) {
+      return [];
+    }
+  });
+  const disp_mapping = get_ar_from_key_heads_md(['OPP','Site','Final','Line','Total','Date'])
+  return (
+    <div className="card round-card"
+    style={{ boxShadow: `0 0px 5px 0 ${color1}`}}>
+      <div className="card-content">
+        <h5 className="center head">Latest Games</h5>
+        {(md && md.length != 0) ? (
+          <table>
+            <tbody>
+              <tr>
+                {disp_mapping?.map(({key_head})=>( <th>{key_head}</th> ))}
+              </tr>
+              {md.map(eamd=>(
+              <tr>
+                {disp_mapping?.map(({key_final})=>( <td>{eamd[key_final]}</td> ))}
+              </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="flow-text center">No Data Fetched at the moment</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const get_ar_from_key_heads = (head_ar) => {
   const mapping = key_mapping_matchup.concat(key_mapping_matchup_sag);
+  return head_ar.map((head) => _.find(mapping, { key_head: head }));
+};
+const get_ar_from_key_heads_md = (head_ar) => {
+  const mapping = key_mapping_md.concat(key_mapping_matchup_sag);
   return head_ar.map((head) => _.find(mapping, { key_head: head }));
 };
 

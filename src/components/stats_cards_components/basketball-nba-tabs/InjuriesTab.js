@@ -72,7 +72,7 @@ export const structure_injuries_data = (data_ar) => {
   return { stat_structure: str_injuries, stat_key: "injuries" };
 };
 
-export const TeamInjuries = ({ team, category, subcategory }) => {
+export const TeamInjuries = ({ team, category, subcategory, showTeam=true }) => {
   const { teamImg, color1} = get_team_data_from_any_name({
     team,
     category,
@@ -93,7 +93,8 @@ export const TeamInjuries = ({ team, category, subcategory }) => {
         style={{ boxShadow: `0 0px 5px 0 ${color1}`}}
       >
         <div className="card-content">
-          <TeamLink {...{team, size:'large', align:'center'}}/>
+          {showTeam && <TeamLink {...{team, size:'large', align:'center'}}/>}
+          {!showTeam && <h5 className="center head">Injury Report</h5>}
           <div className="spacing-10px"></div>
 
           {injuries && injuries?.length != 0 ? (
