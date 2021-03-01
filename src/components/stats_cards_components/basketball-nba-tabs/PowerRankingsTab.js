@@ -2,6 +2,7 @@ import _ from "lodash";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
+  get_n_with_sign,
   get_team_data_from_any_name,
   get_team_key,
 } from "../../../utils/utils";
@@ -55,29 +56,34 @@ export const TeamPowerRankings = ({ team, category, subcategory }) => {
     subcategory,
   });
   // const injuries = []
-  const { ranking, rating } = useSelector((state) => {
+  const ob = useSelector((state) => {
     try {
-      return state.teamStats[category][subcategory].stats["powerrankings"][
-        team
-      ];
+      return state?.teamStats[category][subcategory]?.stats["powerrankings"][team];
+
     } catch (err) {
-      return [];
+      return {ranking:'', rating:''};
     }
   });
-  // console.log(team, injuries);
+  const { ranking, rating } = ob || {ranking:'', rating:''};
+  const display_r = (inp)=>{
+    if(!inp) return 'N/A';
+    return get_n_with_sign(inp);
+  }
   return (
     <>
-      <div className="card round-card"
-      style={{ boxShadow: `0 0px 5px 0 ${color1}`}}>
+      <div
+        className="card round-card"
+        style={{ boxShadow: `0 0px 5px 0 ${color1}` }}
+      >
         <div className="card-content">
-          <div className="row-flex justify-space-around">
+          <div className="row-flex justify-space-around flex-wrap">
             <div className="row-flex">
-              <h6 className="head">PowerRanking: </h6>
-              <h6 className="head">{ranking}</h6>
+              <h6 className="head m5">PowerRanking: </h6>
+              <h6 className="head m5">{display_r(ranking)}</h6>
             </div>
             <div className="row-flex">
-              <h6 className="head">Sagarin Rating : </h6>
-              <h6 className="head">{rating}</h6>
+              <h6 className="head m5">Sagarin Rating : </h6>
+              <h6 className="head m5">{display_r(rating)}</h6>
             </div>
           </div>
         </div>

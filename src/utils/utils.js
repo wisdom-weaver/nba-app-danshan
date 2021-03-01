@@ -110,3 +110,8 @@ export const get_all_teams_names = ({category, subcategory}) => {
   catch(err){ return {} }
 }
 
+export const get_n_with_sign = (n)=>{
+  var sign = Math.sign(n)==-1?'-':'+'
+  var abs_n = Math.abs(parseFloat(n));
+  return sign+abs_n;
+}

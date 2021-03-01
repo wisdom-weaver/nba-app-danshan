@@ -17,6 +17,7 @@ import { TeamOdds } from "../components/stats_cards_components/basketball-nba-ta
 import { TeamTrends } from "../components/stats_cards_components/basketball-nba-tabs/TrendsTab";
 import { TeamMatchup } from "../components/stats_cards_components/basketball-nba-tabs/MatchTab";
 import { TeamPowerRankings } from "../components/stats_cards_components/basketball-nba-tabs/PowerRankingsTab";
+import { ButtonLinks } from "../components/Layout";
 
 const category = "basketball";
 const subcategory = "nba";
@@ -58,7 +59,7 @@ function TeamPage(props) {
         >
           <div className="spacing-30px"></div>
           <div className="row">
-            <div className="col s12 m10 offset-m1 l8 offset-l2">
+            <div className="col s12 m12 l6 offset-l3">
               <div className="card round-card" style={{ background: color1 }}>
                 <div className="card-content">
                   <div className="col-flex">
@@ -66,19 +67,22 @@ function TeamPage(props) {
                       className="large-logo-container"
                       style={{
                         backgroundColor: "white",
-                        padding: "5px",
-                        height: "100px",
-                        width: "100px",
+                        padding: "2px",
+                        height: "80px",
+                        width: "80px",
                         overflow: "hidden",
-                        borderRadius: "25px",
+                        borderRadius: "15px",
                       }}
                     >
                       <img src={teamImg} />
                     </div>
-                    <h4 className="head white-text">{teamName}</h4>
+                    <h5 className="head white-text">{teamName}</h5>
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="row">
+              <ButtonLinks />
             </div>
             {status?.powerrankings == "loaded" && (
               <div className="col s12">
@@ -90,16 +94,6 @@ function TeamPage(props) {
                 <TeamInjuries {...{ team: teamName, category, subcategory }} />
               </div>
             )}
-            {/* {status?.odds == "loaded" && (
-              <div className="col s12">
-                <TeamOdds {...{ team: teamName, category, subcategory }} />
-              </div>
-            )} */}
-            {/* {status?.trends == "loaded" && (
-              <div className="col s12">
-                <TeamTrends {...{ team: teamName, category, subcategory }} />
-              </div>
-            )} */}
             {status?.matchup == "loaded" && (
               <div className="col s12">
                 <TeamMatchup {...{ team: teamName, category, subcategory }} />

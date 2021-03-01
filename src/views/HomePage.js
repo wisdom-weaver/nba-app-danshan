@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import LargeLogo from "../components/LargeLogo";
+import { ButtonLinks } from "../components/Layout";
 import SmallLogo from "../components/SmallLogo";
 import {
   get_all_teams_names,
@@ -57,7 +58,10 @@ function HomePage() {
   // console.log(all_teams_data);
   return (
     <div>
-      <h1 className="center">NBA Teams</h1>
+      <h1 className="center">NBA</h1>
+      <div className="row">
+        <ButtonLinks />
+      </div>
       <div className="">
         <div className="row-flex wrap jusitfy-content-space-between mb-0px">
           {all_teams_data.map((team) => (
