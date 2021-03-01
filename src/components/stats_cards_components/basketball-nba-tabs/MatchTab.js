@@ -311,7 +311,7 @@ const key_mapping_md = [
     key_final: "total" ,
   },
   {
-    key_init: "gsx$prdata",
+    key_init: "gsx$_cre1l",
     key_head: "Date" ,
     key_final: "date" ,
   }  
@@ -349,7 +349,7 @@ export const structure_matchup_data = (data_ar) => {
 
     // console.log("raw_matchup=>", raw_matchup);
 
-    // console.log('raw_matchup_md', raw_matchup_md);
+    console.log('raw_matchup_md', raw_matchup_md);
     raw_matchup_md = structure_raw_row_from_key_mapping({
       raw: raw_matchup_md,
       key_mapping: key_mapping_md,

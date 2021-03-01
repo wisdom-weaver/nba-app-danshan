@@ -37,7 +37,7 @@ const filter  = ({search, injuries_all})=>{
     return {team, count}
   })
   var sorted = injuries_all.filter(ea=>ea.count!=0).sort((a,b)=>b.count>a.count).map(({team})=>team);
-  console.log(sorted, injuries_all);
+  // console.log(sorted, injuries_all);
   return sorted;
 }
 
