@@ -1,6 +1,9 @@
 import _ from "lodash";
 import { useSelector } from "react-redux";
-import { get_team_data_from_any_name, get_team_key } from "../../../utils/utils";
+import {
+  get_team_data_from_any_name,
+  get_team_key,
+} from "../../../utils/utils";
 import LargeLogo from "../../LargeLogo";
 import {
   SingleStat,
@@ -56,7 +59,8 @@ const key_mapping_trends = [
   },
 ];
 
-const category = 'basketball', subcategory ='nba';
+const category = "basketball",
+  subcategory = "nba";
 
 export const structure_trends_data = (data_ar) => {
   var raw_trends = data_ar[0].feed.entry;
@@ -137,8 +141,6 @@ export const TrendsTab = ({ statA, statB }) => {
   );
 };
 
-
-
 export const TeamTrends = ({ team, category, subcategory }) => {
   const { teamImg, color1, color2 } = get_team_data_from_any_name({
     team,
@@ -155,44 +157,51 @@ export const TeamTrends = ({ team, category, subcategory }) => {
   const show_trends = key_mapping_trends.slice(2);
   // return <></>
   return (
-    <div className="card round-card"
-    style={{ boxShadow: `0 0px 5px 0 ${color1}`}}
+    <div
+      className="card round-card"
+      style={{ boxShadow: `0 0px 5px 0 ${color1}` }}
     >
       <div className="card-content">
         {trends && Object.keys(trends).length != 0 ? (
           <>
-          <table className="hide-on-small-only">
-          <tbody>
-            <tr>
-              <th>Team</th>
-              {show_trends.map(({ key_head, key_final }) => (
-                <th>{key_head}</th>
-              ))}
-            </tr>
-            <tr>
-              <td style={{ borderBottom: `3px solid ${color1}` }}>
-                {trends["team"]}
-              </td>
-              {show_trends.map(({ key_head, key_final }) => (
-                <td>{trends[key_final]}</td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
-        <table className="hide-on-med-and-up">
-          <tbody>
-            {show_trends.map(({ key_head, key_final }) => (
-              <SingleStat
-                statLeft={trends[key_final]}
-                // statRight={trendsB[key_final]}
-                show_line={true}
-                statTitle={key_head}
-                {...{ color1, color2 }}
-              />
-            ))}
-          </tbody>
-        </table>
-        </>
+            <h5 className="center head">Trends</h5>
+            <table className="hide-on-small-only">
+              <tbody>
+                <tr>
+                  <th>Team</th>
+                  {show_trends.map(({ key_head, key_final }) => (
+                    <th>{key_head}</th>
+                  ))}
+                </tr>
+                <tr>
+                  <td style={{ borderBottom: `3px solid ${color1}` }}>
+                    {trends["team"]}
+                  </td>
+                  {show_trends.map(({ key_head, key_final }) => (
+                    <td>{trends[key_final]}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+            <div className="hide-on-med-and-up">
+              <div className="col-flex">
+                {show_trends.map(({ key_head, key_final }) => (
+                  <>
+                    <div
+                      style={{ maxWidth: "200px" }}
+                      className="row-flex w-100 justify-space-between"
+                    >
+                      <>
+                        <span className="head">{key_head}</span>
+                        <span>{trends[key_final]}</span>
+                      </>
+                    </div>
+                    <div className="spacing-10px"></div>
+                  </>
+                ))}
+              </div>
+            </div>
+          </>
         ) : (
           <h5 className="center">No Trends yet</h5>
         )}
