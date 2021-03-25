@@ -60,7 +60,7 @@ const format_injuries_pos = (inp)=>{
     {imp:'na',   style:'black-text'},
   ]
   let evaluated = ar.find(({imp})=>inp.toLowerCase().includes(imp))
-  let classname = (evaluated && evaluated.style) ||  'black'
+  let classname = (evaluated && evaluated.style) ||  'black-text'
   return <span className={classname}>{inp}</span>
 };
 
