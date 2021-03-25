@@ -64,8 +64,8 @@ function HomePage() {
       </div>
       <div className="">
         <div className="row-flex wrap jusitfy-content-space-between mb-0px">
-          {all_teams_data.map((team) => (
-            <>
+          {all_teams_data.map((team, team_index) => (
+            <React.Fragment key={team_index}>
               <NavLink to={`/team/${team.teamName.replace(" ", "_")}`}>
                 <div
                   className="card round-card m5 cursor-pointer mb-0px"
@@ -93,7 +93,7 @@ function HomePage() {
                   </div>
                 </div>
               </NavLink>
-            </>
+            </React.Fragment>
           ))}
         </div>
       </div>

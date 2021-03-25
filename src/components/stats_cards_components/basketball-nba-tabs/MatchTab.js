@@ -282,23 +282,23 @@ const key_mapping_matchup_sag = [
 const key_mapping_md = [
   {
     key_init: "gsx$_chk2m",
-    key_head: "Team" ,
-    key_final: "team_md" ,
+    key_head: "Team",
+    key_final: "team_md",
   },
   {
     key_init: "gsx$_ciyn3",
-    key_head: "OPP" ,
-    key_final: "opp" ,
+    key_head: "OPP",
+    key_final: "opp",
   },
   {
     key_init: "gsx$_ckd7g",
-    key_head: "Site" ,
-    key_final: "site" ,
+    key_head: "Site",
+    key_final: "site",
   },
   {
     key_init: "gsx$_clrrx",
-    key_head: "Final" ,
-    key_final: "final" ,
+    key_head: "Final",
+    key_final: "final",
   },
   {
     key_init: "gsx$_cyevm",
@@ -307,23 +307,62 @@ const key_mapping_md = [
   },
   {
     key_init: "gsx$_cztg3",
-    key_head: "Total" ,
-    key_final: "total" ,
+    key_head: "Total",
+    key_final: "total",
   },
   {
     key_init: "gsx$_cre1l",
-    key_head: "Date" ,
-    key_final: "date" ,
-  }  
-]
+    key_head: "Date",
+    key_final: "date",
+  },
+];
+
+const format_md = {
+  team_md: ({row}) => {
+    return row['team_md'];
+  },
+  opp: ({row}) => {
+    return row['opp'];
+  },
+  site: ({row}) => {
+    var {site} = row;
+    var lsite = site.toLowerCase();
+    const classname =  (lsite=='home' && 'blue-text') || (lsite=='away' && 'purple-text') || ''
+    return <span className={classname}>{site}</span>;
+  },
+  final: ({row}) => {
+    const {final} = row;
+    const [a,b] = final.split('-');
+    const classname =  (a>b && 'green-text') || (b>a && 'red-text') || ''
+    return <span className={classname}>{final}</span>;
+  },
+  line: ({row}) => {
+    const {final, line} = row;
+    let [a,b] = final.split('-');
+    a = parseFloat(a)+parseFloat(line)
+    const classname =  (a>b && 'green-text') || (b>a && 'red-text') || ''
+    return <span className={classname}>{line}</span>;
+  },
+  total: ({row}) => {
+    let {final, total} = row;
+    total = parseFloat(total);
+    const [a,b] = final.split('-');
+    const fin_tot = parseFloat(a)+parseFloat(b)
+    const classname =  (fin_tot>total ? 'green-text' : 'red-text')
+    return <span className={classname}>{total}</span>;
+  },
+  date: ({row}) => {
+    return row['date'];
+  },
+};
 
 const category = "basketball",
   subcategory = "nba";
 
 export const structure_matchup_data = (data_ar) => {
   try {
-    var raw_matchup = data_ar[0].feed.entry;
-    var raw_matchup_md = data_ar[0].feed.entry;
+    var raw_matchup = data_ar && data_ar[0]?.feed.entry;
+    var raw_matchup_md = data_ar && data_ar[0]?.feed.entry;
     // console.log("raw_matchup", raw_matchup);
     var raw_matchup_sag = data_ar[1].feed.entry;
     // console.log("raw_matchup_sag", raw_matchup_sag);
@@ -343,13 +382,13 @@ export const structure_matchup_data = (data_ar) => {
     raw_matchup_sag = raw_matchup_sag.map((ea) => ({
       ...ea,
       team: get_team_key({ team: ea.team, category, subcategory }),
-      rating : get_n_with_sign(ea.rating),
-      ranking : get_n_with_sign(ea.ranking),
+      rating: get_n_with_sign(ea.rating),
+      ranking: get_n_with_sign(ea.ranking),
     }));
 
     // console.log("raw_matchup=>", raw_matchup);
 
-    console.log('raw_matchup_md', raw_matchup_md);
+    // console.log("raw_matchup_md", raw_matchup_md);
     raw_matchup_md = structure_raw_row_from_key_mapping({
       raw: raw_matchup_md,
       key_mapping: key_mapping_md,
@@ -360,20 +399,23 @@ export const structure_matchup_data = (data_ar) => {
     }));
     raw_matchup_md = _.groupBy(raw_matchup_md, "team");
     raw_matchup_md = Object.entries(raw_matchup_md);
-    raw_matchup_md = raw_matchup_md.map(([key, ob])=>([key, {md:ob}]));
+    raw_matchup_md = raw_matchup_md.map(([key, ob]) => [key, { md: ob }]);
     raw_matchup_md = Object.fromEntries(raw_matchup_md);
 
     // console.log('raw_matchup_md', raw_matchup_md);
-    
+
     var str_matchup = _.keyBy(
       _.merge(_.keyBy(raw_matchup, "team"), _.keyBy(raw_matchup_sag, "team")),
       "team"
     );
 
     var final_str_matchup = get_all_teams_names({ category, subcategory });
-    final_str_matchup = final_str_matchup.map(team=>([team, { ...str_matchup[team], ...raw_matchup_md[team] } ]))
+    final_str_matchup = final_str_matchup.map((team) => [
+      team,
+      { ...str_matchup[team], ...raw_matchup_md[team] },
+    ]);
     final_str_matchup = Object.fromEntries(final_str_matchup);
-    
+
     delete final_str_matchup[""];
     delete final_str_matchup["Team"];
 
@@ -516,8 +558,10 @@ export const TeamMatchup = ({ team, category, subcategory }) => {
   ];
 
   return (
-    <div className="card round-card"
-    style={{ boxShadow: `0 0px 5px 0 ${color1}`}}>
+    <div
+      className="card round-card"
+      style={{ boxShadow: `0 0px 5px 0 ${color1}` }}
+    >
       <div className="card-content">
         {match && Object.keys(match).length != 0 ? (
           <>
@@ -599,22 +643,37 @@ export const TeamMatchupMD = ({ team, category, subcategory }) => {
       return [];
     }
   });
-  const disp_mapping = get_ar_from_key_heads_md(['OPP','Site','Final','Line','Total','Date'])
+  const disp_mapping = get_ar_from_key_heads_md([
+    "OPP",
+    "Site",
+    "Final",
+    "Line",
+    "Total",
+    "Date",
+  ]);
   return (
-    <div className="card round-card"
-    style={{ boxShadow: `0 0px 5px 0 ${color1}`}}>
+    <div
+      className="card round-card"
+      style={{ boxShadow: `0 0px 5px 0 ${color1}` }}
+    >
       <div className="card-content">
         <h5 className="center head">Latest Games</h5>
-        {(md && md.length != 0) ? (
+        {md && md.length != 0 ? (
           <table>
             <tbody>
               <tr>
-                {disp_mapping?.map(({key_head})=>( <th>{key_head}</th> ))}
+                {disp_mapping?.map(({ key_head }, index) => (
+                  <th key={index}>{key_head}</th>
+                ))}
               </tr>
-              {md.map(eamd=>(
-              <tr>
-                {disp_mapping?.map(({key_final})=>( <td>{eamd[key_final]}</td> ))}
-              </tr>
+              {md.map((eamd) => (
+                <tr>
+                  {disp_mapping?.map(({ key_final }, index) => (
+                    <td key={index}>{
+                      format_md[key_final]({ row:eamd })
+                    }</td>
+                  ))}
+                </tr>
               ))}
             </tbody>
           </table>

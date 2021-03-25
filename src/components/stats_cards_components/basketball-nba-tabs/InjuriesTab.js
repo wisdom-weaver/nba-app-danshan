@@ -52,6 +52,18 @@ const key_mapping_injuries = [
   },
 ];
 
+const format_injuries_pos = (inp)=>{
+  let ar = [
+    {imp:'high', style:'red-text'},
+    {imp:'med',  style:'blue-text'},
+    {imp:'low',  style:'green-text'},
+    {imp:'na',   style:'black-text'},
+  ]
+  let evaluated = ar.find(({imp})=>inp.toLowerCase().includes(imp))
+  let classname = (evaluated && evaluated.style) ||  'black'
+  return <span className={classname}>{inp}</span>
+};
+
 const category = "basketball";
 const subcategory = "nba";
 
@@ -123,7 +135,7 @@ export const TeamInjuries = ({ team, category, subcategory, showTeam=true }) => 
                             <tr>
                               <th>{player}</th>
                               <td>
-                                {position}/{positionno}
+                                {format_injuries_pos(`${position}/${positionno}`)}
                               </td>
                               <td>{updated}</td>
                               <td>{injury}</td>
@@ -158,7 +170,7 @@ export const TeamInjuries = ({ team, category, subcategory, showTeam=true }) => 
                             <tr>
                               <th>{player}</th>
                               <td>
-                                {position}/{positionno}
+                              {format_injuries_pos(`${position}/${positionno}`)}
                               </td>
                               <td>{updated}</td>
                               <td>{injury}</td>
@@ -237,7 +249,7 @@ export const InjuriesTab = ({ statA, statB }) => {
                               <tr>
                                 <th>{player}</th>
                                 <td>
-                                  {position}/{positionno}
+                                  {format_injuries_pos(`${position}/${positionno}`)}
                                 </td>
                                 <td>{updated}</td>
                                 <td>{injury}</td>
@@ -272,7 +284,7 @@ export const InjuriesTab = ({ statA, statB }) => {
                               <tr>
                                 <th>{player}</th>
                                 <td>
-                                  {position}/{positionno}
+                                  {format_injuries_pos(`${position}/${positionno}`)}
                                 </td>
                                 <td>{updated}</td>
                                 <td>{injury}</td>
