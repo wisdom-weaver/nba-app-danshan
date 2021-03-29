@@ -50,6 +50,11 @@ const key_mapping_injuries = [
     key_init: "gsx$positionno",
     key_final: "positionno",
   },
+  {
+    key_head: "PlayerLink",
+    key_init: "gsx$link",
+    key_final: "player_link",
+  }
 ];
 
 const format_injuries_pos = (inp)=>{
@@ -129,11 +134,16 @@ export const TeamInjuries = ({ team, category, subcategory, showTeam=true }) => 
                           updated,
                           injury,
                           injurystatus,
+                          player_link,
                           positionno,
                         }) => (
                           <>
                             <tr>
-                              <th>{player}</th>
+                              <th>
+                                {player_link?(
+                                  <a href={player_link} target="_blank">{player}</a>
+                                ):(player)}
+                              </th>
                               <td>
                                 {format_injuries_pos(`${position}/${positionno}`)}
                               </td>
