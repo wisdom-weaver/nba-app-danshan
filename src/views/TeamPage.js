@@ -18,6 +18,7 @@ import { TeamTrends } from "../components/stats_cards_components/basketball-nba-
 import { TeamMatchup, TeamMatchupMD } from "../components/stats_cards_components/basketball-nba-tabs/MatchTab";
 import { TeamPowerRankings } from "../components/stats_cards_components/basketball-nba-tabs/PowerRankingsTab";
 import { ButtonLinks } from "../components/Layout";
+import { TeamDepthChartTab } from "../components/stats_cards_components/basketball-nba-tabs/DepthChartTab";
 
 const category = "basketball";
 const subcategory = "nba";
@@ -40,14 +41,6 @@ function TeamPage(props) {
       return state.teamStats[category][subcategory].status;
     } catch (err) {
       return false;
-    }
-  });
-
-  const team_matchup = useSelector((state) => {
-    try {
-      return state.teamStats[category][subcategory].stats.matchup[teamName];
-    } catch (err) {
-      return {};
     }
   });
 
@@ -107,6 +100,11 @@ function TeamPage(props) {
             {status?.trends == "loaded" && (
               <div className="col s12">
                 <TeamTrends {...{ team: teamName, category, subcategory }} />
+              </div>
+            )}
+            {status?.['depthcharts'] == "loaded" && (
+              <div className="col s12">
+                <TeamDepthChartTab {...{ team: teamName, category, subcategory, showTeam:false }} />
               </div>
             )}
           </div>

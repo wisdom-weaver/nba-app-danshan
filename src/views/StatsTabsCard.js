@@ -27,6 +27,7 @@ import {
 import { get_colors_combo, get_team_data_from_any_name } from "../utils/utils";
 import { TrendsTab } from "../components/stats_cards_components/basketball-nba-tabs/TrendsTab";
 import { StreaksTab } from "../components/stats_cards_components/basketball-nba-tabs/StreaksTab";
+import { DeepChartTab } from "../components/stats_cards_components/basketball-nba-tabs/DepthChartTab";
 
 export const dispatch_structured_data = ({
   category,
@@ -86,17 +87,6 @@ function StatsTabsCard(props) {
   var [teamA_mini, teamB_mini] = GameID.split("@").map(
     (ea) => ea.split(" ").reverse()[0]
   );
-  const configs = {
-    matchup: {
-      apis: [
-        // match_api,
-        "https://spreadsheets.google.com/feeds/list/1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk/1/public/values?alt=json",
-        // sag_api
-        "https://spreadsheets.google.com/feeds/list/1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk/4/public/values?alt=json",
-      ],
-      structure_data: structure_matchup_data,
-    },
-  };
   const { stats, status } = useSelector(
     (store) => store.teamStats[category][subcategory]
   );

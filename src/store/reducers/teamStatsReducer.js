@@ -4,6 +4,7 @@ import { structure_odds_data } from "../../components/stats_cards_components/bas
 import { structure_trends_data } from "../../components/stats_cards_components/basketball-nba-tabs/TrendsTab";
 import { structure_streaks_data } from "../../components/stats_cards_components/basketball-nba-tabs/StreaksTab";
 import { structure_powerrankings_data } from "../../components/stats_cards_components/basketball-nba-tabs/PowerRankingsTab";
+import { structure_depthcharts_data } from "../../components/stats_cards_components/basketball-nba-tabs/DepthChartTab";
 
 const initialState = {
   basketball: {
@@ -14,7 +15,8 @@ const initialState = {
         odds: "not_loaded",
         trends: "not_loaded",
         streaks: "not_loaded",
-        powerrankings: "not_loaded"
+        powerrankings: "not_loaded",
+        depthcharts: "not_loaded"
       },
       configs: {
         matchup: {
@@ -55,6 +57,12 @@ const initialState = {
             "https://spreadsheets.google.com/feeds/list/1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk/8/public/values?alt=json",
           ],
           structure_data: structure_powerrankings_data,
+        },
+        depthcharts:{
+          apis: [
+            "https://spreadsheets.google.com/feeds/list/1cUcZSRXi5ksKsHqTnQGTtWkhflNbxUpTTwaPmLv-cmk/12/public/values?alt=json",
+          ],
+          structure_data: structure_depthcharts_data,
         }
       },
     },
