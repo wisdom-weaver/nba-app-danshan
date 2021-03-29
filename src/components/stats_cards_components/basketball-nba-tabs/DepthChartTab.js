@@ -85,14 +85,14 @@ export const TeamDepthChartTab = ({
               <table style={{ maxWidth: 300 }} className="m0auto" >
                 <tbody>
                   <tr>
-                    <th className="center">Pos</th>
+                    <th className="left-align">Pos</th>
                     <th className="center">Starter</th>
                   </tr>
                   {depthcharts?.map(({ team, pos, starter }, index) => (
                     <React.Fragment key={index}>
                       {index < 5 && (
                         <tr>
-                          <th>{pos}</th>
+                          <th className="left-align">{pos}</th>
                           <th>{starter}</th>
                         </tr>
                       )}
@@ -110,7 +110,7 @@ export const TeamDepthChartTab = ({
                     <React.Fragment key={index}>
                       {index >= 5 && (
                         <tr>
-                          <td>{pos}</td>
+                          <th className="left-align">{pos}</th>
                           <td>{starter}</td>
                         </tr>
                       )}
